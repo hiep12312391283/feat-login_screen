@@ -25,7 +25,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-
     _taxCodeController.addListener(_updateCloseIcon);
     _passwordController.addListener(_updateEyeIcon);
   }
@@ -43,18 +42,21 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //Show/Hide EyeIcon
-  void toggleEyeIcon() {
+  void _toggleEyeIcon() {
     setState(() {
       _isObscure = !_isObscure;
     });
   }
 
   //ElevatedButton
-  void customLogin() {
+  void _login() {
     setState(() {
       _validateMode = AutovalidateMode.always;
     });
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() &&
+        _taxCodeController.text == '1111111111' &&
+        _accountController.text == 'demo' &&
+        _passwordController.text == '12345678') {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
     } else {
@@ -66,8 +68,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     _taxCodeController.dispose();
+    _taxCodeController.removeListener(_updateCloseIcon);
     _accountController.dispose();
     _passwordController.dispose();
+    _passwordController.removeListener(_updateEyeIcon);
     super.dispose();
   }
 
@@ -195,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                           borderSide: BorderSide(color: Color(0xFFF24E1E))),
                       suffixIcon: _showEyeIcon
                           ? IconButton(
-                              onPressed: toggleEyeIcon,
+                              onPressed: _toggleEyeIcon,
                               icon: Icon(
                                 _isObscure
                                     ? Icons.visibility
@@ -209,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   //Button đăng nhập
                   ElevatedButton(
-                    onPressed: customLogin,
+                    onPressed: _login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF24E1E),
                       shape: RoundedRectangleBorder(
