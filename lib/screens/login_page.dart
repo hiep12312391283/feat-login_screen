@@ -14,27 +14,31 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController taxCodeController = TextEditingController();
-  final TextEditingController accountController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController _taxCodeController = TextEditingController();
+  final TextEditingController _accountController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _isObscure = true;
-  bool showCloseIcon = false;
-  bool showEyeIcon = false;
-  AutovalidateMode validateMode = AutovalidateMode.disabled;
+  bool _showCloseIcon = false;
+  bool _showEyeIcon = false;
+  AutovalidateMode _validateMode = AutovalidateMode.disabled;
 
   @override
   void initState() {
     super.initState();
 
-    taxCodeController.addListener(() {
-      setState(() {
-        showCloseIcon = taxCodeController.text.isNotEmpty;
-      });
+    _taxCodeController.addListener(_updateCloseIcon);
+    _passwordController.addListener(_updateEyeIcon);
+  }
+
+  void _updateCloseIcon() {
+    setState(() {
+      _showCloseIcon = _taxCodeController.text.isNotEmpty;
     });
-    passwordController.addListener(() {
-      setState(() {
-        showEyeIcon = passwordController.text.isNotEmpty;
-      });
+  }
+
+  void _updateEyeIcon() {
+    setState(() {
+      _showEyeIcon = _passwordController.text.isNotEmpty;
     });
   }
 
@@ -46,9 +50,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //ElevatedButton
-  void buttonLogin() {
+  void customLogin() {
     setState(() {
-      validateMode = AutovalidateMode.always;
+      _validateMode = AutovalidateMode.always;
     });
     if (_formKey.currentState!.validate()) {
       Navigator.push(
@@ -61,9 +65,9 @@ class _LoginPageState extends State<LoginPage> {
   //Dispose
   @override
   void dispose() {
-    taxCodeController.dispose();
-    accountController.dispose();
-    passwordController.dispose();
+    _taxCodeController.dispose();
+    _accountController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -73,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       body: Form(
         key: _formKey,
-        autovalidateMode: validateMode,
+        autovalidateMode: _validateMode,
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -102,15 +106,15 @@ class _LoginPageState extends State<LoginPage> {
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly
                     ],
-                    controller: taxCodeController,
+                    controller: _taxCodeController,
                     decoration: InputDecoration(
                       counterText: "",
-                      suffixIcon: showCloseIcon
+                      suffixIcon: _showCloseIcon
                           ? IconButton(
                               icon: SvgPicture.asset(
                                   'assets/images/icon_close.svg'),
                               onPressed: () {
-                                taxCodeController.clear();
+                                _taxCodeController.clear();
                               },
                             )
                           : null,
@@ -142,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 8),
 
                   TextFormField(
-                    controller: accountController,
+                    controller: _accountController,
                     decoration: InputDecoration(
                       hintText: 'Tài khoản',
                       hintStyle: const TextStyle(fontWeight: FontWeight.w400),
@@ -179,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                       return null;
                     },
                     obscureText: _isObscure,
-                    controller: passwordController,
+                    controller: _passwordController,
                     decoration: InputDecoration(
                       hintText: 'Mật khẩu',
                       hintStyle: const TextStyle(fontWeight: FontWeight.w400),
@@ -189,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                               const BorderSide(color: Color(0xFFF24E1E))),
                       focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFF24E1E))),
-                      suffixIcon: showEyeIcon
+                      suffixIcon: _showEyeIcon
                           ? IconButton(
                               onPressed: toggleEyeIcon,
                               icon: Icon(
@@ -205,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   //Button đăng nhập
                   ElevatedButton(
-                    onPressed: buttonLogin,
+                    onPressed: customLogin,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF24E1E),
                       shape: RoundedRectangleBorder(
