@@ -18,6 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController accountController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool _isObscure = true;
+  bool showCloseIcon = false;
+  bool showEyeIcon = false;
   AutovalidateMode validateMode = AutovalidateMode.disabled;
 
   @override
@@ -25,11 +27,44 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
 
     taxCodeController.addListener(() {
-      setState(() {});
+      setState(() {
+        showCloseIcon = taxCodeController.text.isNotEmpty;
+      });
     });
     passwordController.addListener(() {
-      setState(() {});
+      setState(() {
+        showEyeIcon = passwordController.text.isNotEmpty;
+      });
     });
+  }
+
+  //Show/Hide EyeIcon
+  void toggleEyeIcon() {
+    setState(() {
+      _isObscure = !_isObscure;
+    });
+  }
+
+  //ElevatedButton
+  void buttonLogin() {
+    setState(() {
+      validateMode = AutovalidateMode.always;
+    });
+    if (_formKey.currentState!.validate()) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
+    } else {
+      showDialog(context: context, builder: (context) => const CustomDialog());
+    }
+  }
+
+  //Dispose
+  @override
+  void dispose() {
+    taxCodeController.dispose();
+    accountController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -70,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller: taxCodeController,
                     decoration: InputDecoration(
                       counterText: "",
-                      suffixIcon: taxCodeController.text.isNotEmpty
+                      suffixIcon: showCloseIcon
                           ? IconButton(
                               icon: SvgPicture.asset(
                                   'assets/images/icon_close.svg'),
@@ -107,15 +142,9 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 8),
 
                   TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Tài khoản không được để trống';
-                      }
-                      return null;
-                    },
                     controller: accountController,
                     decoration: InputDecoration(
-                      hintText: 'Mã số thuế',
+                      hintText: 'Tài khoản',
                       hintStyle: const TextStyle(fontWeight: FontWeight.w400),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(6),
@@ -124,6 +153,12 @@ class _LoginPageState extends State<LoginPage> {
                       focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFF24E1E))),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Tài khoản không được để trống';
+                      }
+                      return null;
+                    },
                   ),
 
                   const SizedBox(height: 16),
@@ -139,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (value == null ||
                           value.length < 8 ||
                           value.length > 50) {
-                        return 'Mật khẩu từ 8 đến 50 ký tự';
+                        return 'Mật khẩu phải từ 8 đến 50 ký tự';
                       }
                       return null;
                     },
@@ -154,13 +189,9 @@ class _LoginPageState extends State<LoginPage> {
                               const BorderSide(color: Color(0xFFF24E1E))),
                       focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFF24E1E))),
-                      suffixIcon: passwordController.text.isNotEmpty
+                      suffixIcon: showEyeIcon
                           ? IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _isObscure = !_isObscure;
-                                });
-                              },
+                              onPressed: toggleEyeIcon,
                               icon: Icon(
                                 _isObscure
                                     ? Icons.visibility
@@ -174,23 +205,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   //Button đăng nhập
                   ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        validateMode = AutovalidateMode.always;
-                      });
-                      if (_formKey.currentState!.validate()) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomePage(),
-                            ));
-                      } else {
-                        showDialog(
-                          context: context,
-                          builder: (context) => const CustomDialog(),
-                        );
-                      }
-                    },
+                    onPressed: buttonLogin,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFF24E1E),
                       shape: RoundedRectangleBorder(
