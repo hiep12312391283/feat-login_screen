@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:login_screen/screens/login_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,9 +10,6 @@ class HomePage extends StatelessWidget {
         body: Center(
       child: ElevatedButton(
         onPressed: () async {
-          var loginBox = Hive.box('userBox'); 
-          await loginBox.put('isLoggedIn', false); ; 
-
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
