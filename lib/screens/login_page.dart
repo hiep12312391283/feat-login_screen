@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
+import 'package:login_screen/models/fake_account.dart';
 import 'package:login_screen/screens/custom/custom_dialog.dart';
 import 'package:login_screen/screens/custom/custom_iconbutton.dart';
 import 'package:login_screen/screens/home_page.dart';
@@ -25,8 +27,16 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    _loadData();
     _taxCodeController.addListener(_updateCloseIcon);
     _passwordController.addListener(_updateEyeIcon);
+  }
+
+  void _loadData() {
+    var loginBox = Hive.box('userBox');
+    _taxCodeController.text = loginBox.get('taxCode', defaultValue: '');
+    _accountController.text = loginBox.get('account', defaultValue: '');
+    _passwordController.text = loginBox.get('password', defaultValue: '');
   }
 
   void _updateCloseIcon() {
@@ -49,18 +59,30 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //ElevatedButton
-  void _login() {
+  void _login() async {
     setState(() {
       _validateMode = AutovalidateMode.always;
     });
-    if (_formKey.currentState!.validate() &&
-        _taxCodeController.text == '1111111111' &&
-        _accountController.text == 'demo' &&
-        _passwordController.text == '12345678') {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
-    } else {
-      showDialog(context: context, builder: (context) => const CustomDialog());
+
+    if (_formKey.currentState!.validate()) {
+      if (_taxCodeController.text == FakeAccount.fakeAccount.taxCodeFake &&
+          _accountController.text == FakeAccount.fakeAccount.accountFake &&
+          _passwordController.text == FakeAccount.fakeAccount.passwordFake) {
+        var loginBox = Hive.box('userBox');
+        await loginBox.put('isLoggedIn', true);
+        await loginBox.put('taxCode', _taxCodeController.text);
+        await loginBox.put('account', _accountController.text);
+        await loginBox.put('password', _passwordController.text);
+
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomePage(),
+            ));
+      } else {
+        showDialog(
+            context: context, builder: (context) => const CustomDialog());
+      }
     }
   }
 
