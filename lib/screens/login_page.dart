@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //ElevatedButton
-  void _login() async {
+  void _login() {
     setState(() {
       _validateMode = AutovalidateMode.always;
     });
@@ -61,7 +61,6 @@ class _LoginPageState extends State<LoginPage> {
       if (_taxCodeController.text == FakeAccount.fakeAccount.taxCodeFake &&
           _accountController.text == FakeAccount.fakeAccount.accountFake &&
           _passwordController.text == FakeAccount.fakeAccount.passwordFake) {
-
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(

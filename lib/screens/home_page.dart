@@ -9,7 +9,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
         body: Center(
       child: ElevatedButton(
-        onPressed: () async {
+        onPressed: () {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
