@@ -76,11 +76,11 @@ class _LoginPageState extends State<LoginPage> {
   //Dispose
   @override
   void dispose() {
-    _taxCodeController.dispose();
+    _passwordController.removeListener(_updateEyeIcon);
     _taxCodeController.removeListener(_updateCloseIcon);
+    _taxCodeController.dispose();
     _accountController.dispose();
     _passwordController.dispose();
-    _passwordController.removeListener(_updateEyeIcon);
     super.dispose();
   }
 

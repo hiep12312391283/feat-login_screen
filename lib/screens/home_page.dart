@@ -10,11 +10,10 @@ class HomePage extends StatelessWidget {
         body: Center(
       child: ElevatedButton(
         onPressed: () {
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(
-                builder: (context) => const LoginPage(),
-              ));
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+              (Route<dynamic> route) => false);
         },
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blue,
