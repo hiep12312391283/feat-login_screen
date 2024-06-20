@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:login_screen/screens/login_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -9,7 +10,10 @@ class HomePage extends StatelessWidget {
         body: Center(
       child: ElevatedButton(
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+              (Route<dynamic> route) => false);
         },
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blue,
@@ -23,4 +27,3 @@ class HomePage extends StatelessWidget {
     ));
   }
 }
-
