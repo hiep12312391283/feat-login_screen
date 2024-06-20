@@ -11,13 +11,13 @@ class SplashScreen extends StatelessWidget {
     Future.delayed(const Duration(seconds: 2), () async {
       // var loginBox = Hive.box('userBox');
       // bool isLoggedIn = loginBox.get('isLoggedIn', defaultValue: false);
-      bool isLoggedIn = UserRepository.isLoggedIn;
+      bool loadScreen = UserRepository.isLoggedIn;
 
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) =>
-              isLoggedIn ? const HomePage() : const LoginPage(),
+              loadScreen ? const HomePage() : const LoginPage(),
         ),
       );
     });

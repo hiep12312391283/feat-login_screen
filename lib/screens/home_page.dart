@@ -5,20 +5,20 @@ import 'package:login_screen/screens/login_page.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  void _logout(BuildContext context) async {
+    await UserRepository.setLoggedIn(false);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+        (Route<dynamic> route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
       child: ElevatedButton(
-        onPressed: () async {
-          await UserRepository.setLoggedIn(false);
-          // var loginBox = Hive.box('userBox');
-          // await loginBox.put('isLoggedIn', false);
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginPage()),
-              (Route<dynamic> route) => false);
-        },
+        onPressed: () => _logout(context),
         style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blue,
             shape:

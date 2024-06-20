@@ -28,18 +28,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _loadData();
-    _taxCodeController.addListener(_updateCloseIcon);
-    _passwordController.addListener(_updateEyeIcon);
-  }
-
-  void _loadData() {
     _taxCodeController.text = UserRepository.taxCode ?? '';
     _accountController.text = UserRepository.account ?? '';
     _passwordController.text = UserRepository.password ?? '';
-    // _taxCodeController.text = loginBox.get('taxCode', defaultValue: '');
-    // _accountController.text = loginBox.get('account', defaultValue: '');
-    // _passwordController.text = loginBox.get('password', defaultValue: '');
+    _taxCodeController.addListener(_updateCloseIcon);
+    _passwordController.addListener(_updateEyeIcon);
   }
 
   void _putData() async {
@@ -47,10 +40,6 @@ class _LoginPageState extends State<LoginPage> {
     await UserRepository.saveTaxCode(_taxCodeController.text);
     await UserRepository.saveAccount(_accountController.text);
     await UserRepository.savePassword(_passwordController.text);
-    // await loginBox.put('isLoggedIn', true);
-    // await loginBox.put('taxCode', _taxCodeController.text);
-    // await loginBox.put('account', _accountController.text);
-    // await loginBox.put('password', _passwordController.text);
   }
 
   void _updateCloseIcon() {

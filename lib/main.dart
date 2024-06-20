@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:login_screen/models/user_repository.dart';
-import 'package:login_screen/screens/login_page.dart';
+import 'package:login_screen/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: LoginPage(),
+        home: SplashScreen(),
       ),
     );
   }
