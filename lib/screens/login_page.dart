@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
 import 'package:login_screen/models/fake_account.dart';
 import 'package:login_screen/screens/custom/custom_dialog.dart';
 import 'package:login_screen/screens/custom/custom_iconbutton.dart';
@@ -22,15 +23,28 @@ class _LoginPageState extends State<LoginPage> {
   bool _showCloseIcon = false;
   bool _showEyeIcon = false;
   AutovalidateMode _validateMode = AutovalidateMode.disabled;
+  var loginBox = Hive.box('userBox');
 
   @override
   void initState() {
     super.initState();
+    _loadData();
     _taxCodeController.addListener(_updateCloseIcon);
     _passwordController.addListener(_updateEyeIcon);
   }
 
+  void _loadData() {
+    _taxCodeController.text = loginBox.get('taxCode', defaultValue: '');
+    _accountController.text = loginBox.get('account', defaultValue: '');
+    _passwordController.text = loginBox.get('password', defaultValue: '');
+  }
 
+  void _putData() async {
+    await loginBox.put('isLoggedIn', true);
+    await loginBox.put('taxCode', _taxCodeController.text);
+    await loginBox.put('account', _accountController.text);
+    await loginBox.put('password', _passwordController.text);
+  }
 
   void _updateCloseIcon() {
     setState(() {
@@ -61,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
       if (_taxCodeController.text == FakeAccount.fakeAccount.taxCodeFake &&
           _accountController.text == FakeAccount.fakeAccount.accountFake &&
           _passwordController.text == FakeAccount.fakeAccount.passwordFake) {
-
+        _putData();
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
