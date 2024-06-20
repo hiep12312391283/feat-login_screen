@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hive/hive.dart';
 import 'package:login_screen/models/fake_account.dart';
+import 'package:login_screen/models/user_repository.dart';
 import 'package:login_screen/screens/custom/custom_dialog.dart';
 import 'package:login_screen/screens/custom/custom_iconbutton.dart';
 import 'package:login_screen/screens/home_page.dart';
@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _showCloseIcon = false;
   bool _showEyeIcon = false;
   AutovalidateMode _validateMode = AutovalidateMode.disabled;
-  var loginBox = Hive.box('userBox');
+  // var loginBox = Hive.box('userBox');
 
   @override
   void initState() {
@@ -34,16 +34,23 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loadData() {
-    _taxCodeController.text = loginBox.get('taxCode', defaultValue: '');
-    _accountController.text = loginBox.get('account', defaultValue: '');
-    _passwordController.text = loginBox.get('password', defaultValue: '');
+    _taxCodeController.text = UserRepository.taxCode ?? '';
+    _accountController.text = UserRepository.account ?? '';
+    _passwordController.text = UserRepository.password ?? '';
+    // _taxCodeController.text = loginBox.get('taxCode', defaultValue: '');
+    // _accountController.text = loginBox.get('account', defaultValue: '');
+    // _passwordController.text = loginBox.get('password', defaultValue: '');
   }
 
   void _putData() async {
-    await loginBox.put('isLoggedIn', true);
-    await loginBox.put('taxCode', _taxCodeController.text);
-    await loginBox.put('account', _accountController.text);
-    await loginBox.put('password', _passwordController.text);
+    await UserRepository.setLoggedIn(true);
+    await UserRepository.saveTaxCode(_taxCodeController.text);
+    await UserRepository.saveAccount(_accountController.text);
+    await UserRepository.savePassword(_passwordController.text);
+    // await loginBox.put('isLoggedIn', true);
+    // await loginBox.put('taxCode', _taxCodeController.text);
+    // await loginBox.put('account', _accountController.text);
+    // await loginBox.put('password', _passwordController.text);
   }
 
   void _updateCloseIcon() {
