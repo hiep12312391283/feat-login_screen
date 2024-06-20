@@ -41,6 +41,6 @@ class UserRepository {
   }
 
   static Future<void> setLoggedIn(bool loggedIn) async {
-    _box.put(_logInKey, loggedIn);
+    await _box.put(_logInKey, loggedIn);
   }
 }

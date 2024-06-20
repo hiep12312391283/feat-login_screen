@@ -16,9 +16,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _taxCodeController = TextEditingController();
-  final TextEditingController _accountController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final _taxCodeController = TextEditingController(text: UserRepository.taxCode);
+  final _accountController = TextEditingController(text: UserRepository.account);
+  final _passwordController = TextEditingController(text: UserRepository.password);
   bool _isObscure = true;
   bool _showCloseIcon = false;
   bool _showEyeIcon = false;
@@ -28,9 +28,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _taxCodeController.text = UserRepository.taxCode ?? '';
-    _accountController.text = UserRepository.account ?? '';
-    _passwordController.text = UserRepository.password ?? '';
     _taxCodeController.addListener(_updateCloseIcon);
     _passwordController.addListener(_updateEyeIcon);
   }
