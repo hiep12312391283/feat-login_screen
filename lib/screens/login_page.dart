@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:login_screen/models/fake_account.dart';
+import 'package:login_screen/models/user_repository.dart';
 import 'package:login_screen/screens/custom/custom_dialog.dart';
 import 'package:login_screen/screens/custom/custom_iconbutton.dart';
 import 'package:login_screen/screens/home_page.dart';
@@ -15,13 +16,14 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _taxCodeController = TextEditingController();
-  final TextEditingController _accountController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final _taxCodeController = TextEditingController(text: UserRepository.taxCode);
+  final _accountController = TextEditingController(text: UserRepository.account);
+  final _passwordController = TextEditingController(text: UserRepository.password);
   bool _isObscure = true;
   bool _showCloseIcon = false;
   bool _showEyeIcon = false;
   AutovalidateMode _validateMode = AutovalidateMode.disabled;
+  // var loginBox = Hive.box('userBox');
 
   @override
   void initState() {
@@ -30,7 +32,12 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController.addListener(_updateEyeIcon);
   }
 
-
+  void _putData() async {
+    await UserRepository.setLoggedIn(true);
+    await UserRepository.saveTaxCode(_taxCodeController.text);
+    await UserRepository.saveAccount(_accountController.text);
+    await UserRepository.savePassword(_passwordController.text);
+  }
 
   void _updateCloseIcon() {
     setState(() {
@@ -61,6 +68,7 @@ class _LoginPageState extends State<LoginPage> {
       if (_taxCodeController.text == FakeAccount.fakeAccount.taxCodeFake &&
           _accountController.text == FakeAccount.fakeAccount.accountFake &&
           _passwordController.text == FakeAccount.fakeAccount.passwordFake) {
+        _putData();
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
