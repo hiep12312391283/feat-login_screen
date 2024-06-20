@@ -1,4 +1,3 @@
-
 class FakeAccount {
   String taxCodeFake;
   String accountFake;
@@ -10,5 +9,5 @@ class FakeAccount {
   });
 
   static FakeAccount fakeAccount = FakeAccount(
-    taxCodeFake: '1111111111', accountFake: 'demo', passwordFake: '12345678');
+      taxCodeFake: '1111111111', accountFake: 'demo', passwordFake: '12345678');
 }
