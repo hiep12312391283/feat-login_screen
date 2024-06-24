@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:login_screen/models/user_repository.dart';
+import 'package:login_screen/providers/user_provider.dart';
 import 'package:login_screen/screens/login_page.dart';
 import 'package:login_screen/screens/home_page.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 2), () async {
-      // var loginBox = Hive.box('userBox');
-      // bool isLoggedIn = loginBox.get('isLoggedIn', defaultValue: false);
-      bool loadScreen = UserRepository.isLoggedIn;
-
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      // bool loadScreen = UserRepository.isLoggedIn;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) =>
-              loadScreen ? const HomePage() : const LoginPage(),
+              userProvider.isLoggedIn ? const HomePage() : const LoginPage(),
         ),
       );
     });

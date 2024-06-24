@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:login_screen/models/user_repository.dart';
+import 'package:login_screen/providers/user_provider.dart';
 import 'package:login_screen/screens/splash_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,12 +17,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ChangeNotifierProvider(create:(context) => UserProvider(),
+    child: GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
-      ),
-    );
+        child: const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: SplashScreen(),
+        ),
+    
+    ),);
   }
 }
