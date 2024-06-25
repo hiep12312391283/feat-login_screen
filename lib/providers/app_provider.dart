@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:login_screen/models/fake_account.dart';
 import 'package:login_screen/models/user_repository.dart';
 
-class UserProvider extends ChangeNotifier {
+class AppProvider extends ChangeNotifier {
   bool _isLogged = UserRepository.isLoggedIn;
   bool get isLoggedIn => _isLogged;
+
   void login(String taxCode, String account, String password) {
     if (taxCode == FakeAccount.fakeAccount.taxCodeFake &&
         account == FakeAccount.fakeAccount.accountFake &&

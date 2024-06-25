@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:login_screen/models/user_repository.dart';
-import 'package:login_screen/providers/user_provider.dart';
+import 'package:login_screen/providers/app_provider.dart';
+import 'package:login_screen/providers/login_provider.dart';
 import 'package:login_screen/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -17,14 +18,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(create:(context) => UserProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create:(_) => LoginProvider()),
+        ChangeNotifierProvider(create:(_) => AppProvider()),
+      ],
     child: GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: const MaterialApp(
           debugShowCheckedModeBanner: false,
           home: SplashScreen(),
         ),
-    
     ),);
   }
 }

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:login_screen/models/user_repository.dart';
-import 'package:login_screen/providers/user_provider.dart';
+import 'package:login_screen/providers/app_provider.dart';
+import 'package:login_screen/providers/login_provider.dart';
 import 'package:login_screen/screens/custom/custom_dialog.dart';
 import 'package:login_screen/screens/custom/custom_iconbutton.dart';
 import 'package:login_screen/screens/home_page.dart';
@@ -23,55 +24,16 @@ class _LoginPageState extends State<LoginPage> {
       TextEditingController(text: UserRepository.account);
   final _passwordController =
       TextEditingController(text: UserRepository.password);
-  bool _isObscure = true;
-  bool _showCloseIcon = false;
-  bool _showEyeIcon = false;
-  AutovalidateMode _validateMode = AutovalidateMode.disabled;
-  // var loginBox = Hive.box('userBox');
-
-  @override
-  void initState() {
-    super.initState();
-    _taxCodeController.addListener(_updateCloseIcon);
-    _passwordController.addListener(_updateEyeIcon);
-  }
-  void _updateCloseIcon() {
-    setState(() {
-      _showCloseIcon = _taxCodeController.text.isNotEmpty;
-    });
-  }
-
-  void _updateEyeIcon() {
-    setState(() {
-      _showEyeIcon = _passwordController.text.isNotEmpty;
-    });
-  }
-
-  //Show/Hide EyeIcon
-  void _toggleEyeIcon() {
-    setState(() {
-      _isObscure = !_isObscure;
-    });
-  }
 
   //ElevatedButton
   void _login() {
-    setState(() {
-      _validateMode = AutovalidateMode.always;
-    });
-
+    final _loginProvider = Provider.of<LoginProvider>(context, listen: false);
+    _loginProvider.validateChanged();
     if (_formKey.currentState!.validate()) {
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
-      (
-        userProvider.login(_taxCodeController.text, _accountController.text, _passwordController.text)
-      )  ;
-
-      // if (_taxCodeController.text == FakeAccount.fakeAccount.taxCodeFake &&
-      //     _accountController.text == FakeAccount.fakeAccount.accountFake &&
-      //     _passwordController.text == FakeAccount.fakeAccount.passwordFake) 
-
-      if(userProvider.isLoggedIn)
-          {
+      final _appProvider = Provider.of<AppProvider>(context, listen: false);
+      _appProvider.login(_taxCodeController.text, _accountController.text,
+          _passwordController.text);
+      if (_appProvider.isLoggedIn) {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -87,8 +49,6 @@ class _LoginPageState extends State<LoginPage> {
   //Dispose
   @override
   void dispose() {
-    _passwordController.removeListener(_updateEyeIcon);
-    _taxCodeController.removeListener(_updateCloseIcon);
     _taxCodeController.dispose();
     _accountController.dispose();
     _passwordController.dispose();
@@ -97,11 +57,12 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _loginProvider = Provider.of<LoginProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Form(
         key: _formKey,
-        autovalidateMode: _validateMode,
+        autovalidateMode: _loginProvider.validateMode,
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -133,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _taxCodeController,
                     decoration: InputDecoration(
                       counterText: "",
-                      suffixIcon: _showCloseIcon
+                      suffixIcon: _loginProvider.showCloseIcon
                           ? IconButton(
                               icon: SvgPicture.asset(
                                   'assets/images/icon_close.svg'),
@@ -151,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                       focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFF24E1E))),
                     ),
+                    onChanged: _loginProvider.onTaxCodeTextFieldChanged,
                     validator: (value) {
                       if (value == null ||
                           value.isEmpty ||
@@ -197,6 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                   ),
                   const SizedBox(height: 8),
+
                   TextFormField(
                     validator: (value) {
                       if (value == null ||
@@ -206,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
                       return null;
                     },
-                    obscureText: _isObscure,
+                    obscureText: _loginProvider.isObscure,
                     controller: _passwordController,
                     decoration: InputDecoration(
                       hintText: 'Mật khẩu',
@@ -217,17 +180,18 @@ class _LoginPageState extends State<LoginPage> {
                               const BorderSide(color: Color(0xFFF24E1E))),
                       focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFF24E1E))),
-                      suffixIcon: _showEyeIcon
+                      suffixIcon: _loginProvider.showEyeIcon
                           ? IconButton(
-                              onPressed: _toggleEyeIcon,
+                              onPressed: _loginProvider.toggleEyeIcon,
                               icon: Icon(
-                                _isObscure
+                                _loginProvider.isObscure
                                     ? Icons.visibility
                                     : Icons.visibility_off,
                                 color: Colors.grey,
                               ))
                           : null,
                     ),
+                    onChanged: _loginProvider.onPasswordTextFieldChanged,
                   ),
                   const SizedBox(height: 20),
 

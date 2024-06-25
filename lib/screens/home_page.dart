@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:login_screen/models/user_repository.dart';
-import 'package:login_screen/providers/user_provider.dart';
+import 'package:login_screen/providers/app_provider.dart';
 import 'package:login_screen/screens/login_page.dart';
 import 'package:provider/provider.dart';
 
@@ -8,10 +8,10 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   void _logout(BuildContext context) async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final _appProvider = Provider.of<AppProvider>(context, listen: false);
     // await UserRepository.setLoggedIn(false);
     UserRepository.setLoggedIn(false);
-    userProvider.logout();
+    _appProvider.logout();
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const LoginPage()),
