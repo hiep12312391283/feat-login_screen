@@ -10,12 +10,12 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 2), () async {
-      final _appProvider = Provider.of<AppProvider>(context, listen: false);
+      final appProvider = context.read<AppProvider>();
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) =>
-              _appProvider.isLoggedIn ? const HomePage() : const LoginPage(),
+              appProvider.isLoggedIn ? const HomePage() : const LoginPage(),
         ),
       );
     });

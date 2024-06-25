@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:login_screen/models/fake_account.dart';
 import 'package:login_screen/models/user_repository.dart';
-import 'package:login_screen/providers/app_provider.dart';
 import 'package:login_screen/providers/login_provider.dart';
 import 'package:login_screen/screens/custom/custom_dialog.dart';
 import 'package:login_screen/screens/custom/custom_iconbutton.dart';
@@ -27,13 +27,14 @@ class _LoginPageState extends State<LoginPage> {
 
   //ElevatedButton
   void _login() {
-    final _loginProvider = Provider.of<LoginProvider>(context, listen: false);
-    _loginProvider.validateChanged();
+    final loginProvider = context.read<LoginProvider>();
+    loginProvider.validateChanged();
+    loginProvider.login(context, _taxCodeController.text,
+        _accountController.text, _passwordController.text);
     if (_formKey.currentState!.validate()) {
-      final _appProvider = Provider.of<AppProvider>(context, listen: false);
-      _appProvider.login(_taxCodeController.text, _accountController.text,
-          _passwordController.text);
-      if (_appProvider.isLoggedIn) {
+      if (_taxCodeController.text == FakeAccount.fakeAccount.taxCodeFake &&
+          _accountController.text == FakeAccount.fakeAccount.accountFake &&
+          _passwordController.text == FakeAccount.fakeAccount.passwordFake) {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -57,12 +58,13 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _loginProvider = Provider.of<LoginProvider>(context);
+    final loginProvider = context.watch<LoginProvider>();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Form(
         key: _formKey,
-        autovalidateMode: _loginProvider.validateMode,
+        autovalidateMode: loginProvider.validateMode,
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -94,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _taxCodeController,
                     decoration: InputDecoration(
                       counterText: "",
-                      suffixIcon: _loginProvider.showCloseIcon
+                      suffixIcon: loginProvider.showCloseIcon
                           ? IconButton(
                               icon: SvgPicture.asset(
                                   'assets/images/icon_close.svg'),
@@ -112,7 +114,10 @@ class _LoginPageState extends State<LoginPage> {
                       focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFF24E1E))),
                     ),
-                    onChanged: _loginProvider.onTaxCodeTextFieldChanged,
+                    onChanged: (value) {
+                      loginProvider.taxCode;
+                      loginProvider.updateTaxCodeIcon(value);
+                    },
                     validator: (value) {
                       if (value == null ||
                           value.isEmpty ||
@@ -143,6 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                       focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFF24E1E))),
                     ),
+                    onChanged: loginProvider.setAccount,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Tài khoản không được để trống';
@@ -159,8 +165,11 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                   ),
                   const SizedBox(height: 8),
-
                   TextFormField(
+                    onChanged: (value) {
+                      loginProvider.updatePassWordIcon(value);
+                      loginProvider.setPassword(value);
+                    },
                     validator: (value) {
                       if (value == null ||
                           value.length < 8 ||
@@ -169,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
                       return null;
                     },
-                    obscureText: _loginProvider.isObscure,
+                    obscureText: loginProvider.isObscure,
                     controller: _passwordController,
                     decoration: InputDecoration(
                       hintText: 'Mật khẩu',
@@ -180,18 +189,17 @@ class _LoginPageState extends State<LoginPage> {
                               const BorderSide(color: Color(0xFFF24E1E))),
                       focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFF24E1E))),
-                      suffixIcon: _loginProvider.showEyeIcon
+                      suffixIcon: loginProvider.showEyeIcon
                           ? IconButton(
-                              onPressed: _loginProvider.toggleEyeIcon,
+                              onPressed: loginProvider.toggleEyeIcon,
                               icon: Icon(
-                                _loginProvider.isObscure
+                                loginProvider.isObscure
                                     ? Icons.visibility
                                     : Icons.visibility_off,
                                 color: Colors.grey,
                               ))
                           : null,
                     ),
-                    onChanged: _loginProvider.onPasswordTextFieldChanged,
                   ),
                   const SizedBox(height: 20),
 
