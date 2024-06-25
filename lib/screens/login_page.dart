@@ -13,7 +13,7 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -25,12 +25,12 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController =
       TextEditingController(text: UserRepository.password);
 
+  late final _loginProvider = context.read<LoginProvider>();
+
   //ElevatedButton
   void _login() {
-    final loginProvider = context.read<LoginProvider>();
-    loginProvider.validateChanged();
-    loginProvider.login(context, _taxCodeController.text,
-        _accountController.text, _passwordController.text);
+    _loginProvider.validateChanged();
+    _loginProvider.login();
     if (_formKey.currentState!.validate()) {
       if (_taxCodeController.text == FakeAccount.fakeAccount.taxCodeFake &&
           _accountController.text == FakeAccount.fakeAccount.accountFake &&
@@ -59,7 +59,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final loginProvider = context.watch<LoginProvider>();
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: Form(
@@ -114,10 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                       focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFF24E1E))),
                     ),
-                    onChanged: (value) {
-                      loginProvider.taxCode;
-                      loginProvider.updateTaxCodeIcon(value);
-                    },
+                    onChanged: loginProvider.setTaxCode,
                     validator: (value) {
                       if (value == null ||
                           value.isEmpty ||
@@ -166,10 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
-                    onChanged: (value) {
-                      loginProvider.updatePassWordIcon(value);
-                      loginProvider.setPassword(value);
-                    },
+                    onChanged: loginProvider.setPassword,
                     validator: (value) {
                       if (value == null ||
                           value.length < 8 ||

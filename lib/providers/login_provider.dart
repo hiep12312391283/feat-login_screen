@@ -21,9 +21,9 @@ class LoginProvider extends ChangeNotifier {
 
   void setTaxCode(String value) {
     _taxCode = value;
+    updateTaxCodeIcon();
     notifyListeners();
   }
-  
 
   void setAccount(String value) {
     _account = value;
@@ -32,6 +32,7 @@ class LoginProvider extends ChangeNotifier {
 
   void setPassword(String value) {
     _password = value;
+    updatePassWordIcon();
     notifyListeners();
   }
 
@@ -40,12 +41,12 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateTaxCodeIcon(String taxCode) {
+  void updateTaxCodeIcon() {
     _showCloseIcon = taxCode.isNotEmpty;
     notifyListeners();
   }
 
-  void updatePassWordIcon(String password) {
+  void updatePassWordIcon() {
     _showEyeIcon = password.isNotEmpty;
     notifyListeners();
   }
@@ -55,7 +56,7 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void login(BuildContext context, taxCode, String account, String password) {
+  void login() {
     if (taxCode == FakeAccount.fakeAccount.taxCodeFake &&
         account == FakeAccount.fakeAccount.accountFake &&
         password == FakeAccount.fakeAccount.passwordFake) {
@@ -65,10 +66,5 @@ class LoginProvider extends ChangeNotifier {
       UserRepository.savePassword(password);
       notifyListeners();
     }
-  }
-
-  void logout(BuildContext context) {
-    UserRepository.setLoggedIn(false);
-    notifyListeners();
   }
 }
