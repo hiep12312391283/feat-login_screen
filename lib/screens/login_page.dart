@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:login_screen/models/fake_account.dart';
 import 'package:login_screen/models/user_repository.dart';
+import 'package:login_screen/providers/app_provider.dart';
 import 'package:login_screen/providers/login_provider.dart';
 import 'package:login_screen/screens/custom/custom_dialog.dart';
 import 'package:login_screen/screens/custom/custom_iconbutton.dart';
@@ -26,24 +26,31 @@ class _LoginPageState extends State<LoginPage> {
       TextEditingController(text: UserRepository.password);
 
   late final _loginProvider = context.read<LoginProvider>();
+  final _appProvider = AppProvider();
 
-  //ElevatedButton
-  void _login() {
-    _loginProvider.validateChanged();
-    _loginProvider.login();
-    if (_formKey.currentState!.validate()) {
-      if (_taxCodeController.text == FakeAccount.fakeAccount.taxCodeFake &&
-          _accountController.text == FakeAccount.fakeAccount.accountFake &&
-          _passwordController.text == FakeAccount.fakeAccount.passwordFake) {
+  
+  @override
+  void initState() {
+    super.initState();
+    _appProvider.addListener(() {
+      if (_appProvider.isLoggedIn) {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => const HomePage(),
             ));
-      } else {
-        showDialog(
-            context: context, builder: (context) => const CustomDialog());
       }
+    });
+  }
+
+  //ElevatedButton
+  void _login() {
+    _loginProvider.validateChanged();
+    if (_formKey.currentState!.validate()) {
+      _loginProvider.login();
+      _appProvider.setLoggedIn(true);
+    } else {
+      showDialog(context: context, builder: (context) => const CustomDialog());
     }
   }
 

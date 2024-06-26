@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
   void _logout(BuildContext context) async {
     final appProvider = context.read<AppProvider>();
     UserRepository.setLoggedIn(false);
-    appProvider.logout(context);
+    appProvider.logout();
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const LoginPage()),

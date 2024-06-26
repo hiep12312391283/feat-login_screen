@@ -4,8 +4,14 @@ import 'package:login_screen/screens/login_page.dart';
 import 'package:login_screen/screens/home_page.dart';
 import 'package:provider/provider.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
