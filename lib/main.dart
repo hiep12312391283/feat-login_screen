@@ -7,6 +7,7 @@ import 'package:login_screen/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await UserRepository.init();
@@ -20,15 +21,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create:(_) => LoginProvider()),
-        ChangeNotifierProvider(create:(_) => AppProvider()),
+        ChangeNotifierProvider(create: (_) => LoginProvider()),
+        ChangeNotifierProvider(create: (_) => AppProvider()),
       ],
-    child: GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: const MaterialApp(
           debugShowCheckedModeBanner: false,
           home: SplashScreen(),
         ),
-    ),);
+      ),
+    );
   }
 }
