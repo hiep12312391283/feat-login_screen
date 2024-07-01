@@ -57,7 +57,6 @@ class LoginState {
 class LoginProvider extends ChangeNotifier {
   LoginState _loginState = LoginState();
   LoginState get loginState => _loginState;
-  LoginStatus status = LoginStatus.initial;
   void setTaxCode(String value) {
     _loginState = _loginState.copyWith(taxCode: value);
     updateTaxCodeIcon();
@@ -97,7 +96,6 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
     await Future.delayed(const Duration(seconds: 1));
     try {
-      // throw Exception("Web sap");
       if (_loginState.taxCode == FakeAccount.fakeAccount.taxCodeFake &&
           _loginState.account == FakeAccount.fakeAccount.accountFake &&
           _loginState.password == FakeAccount.fakeAccount.passwordFake) {
@@ -106,17 +104,17 @@ class LoginProvider extends ChangeNotifier {
         UserRepository.saveTaxCode(_loginState.taxCode);
         UserRepository.saveAccount(_loginState.account);
         UserRepository.savePassword(_loginState.password);
-        notifyListeners();
-      }
+      } 
+        else {
+          throw Exception(
+              "Đăng nhập không thành công"); 
+        }
     } catch (e) {
-      _loginState =
-          _loginState.copyWith(status: LoginStatus.error, error: e.toString());
+      _loginState = _loginState.copyWith(status: LoginStatus.error,error: e.toString());
       notifyListeners();
     } finally {
-      _loginState =
-          _loginState.copyWith(status: LoginStatus.initial, error: null);
-      // error = null;
-      notifyListeners();
+        _loginState = _loginState.copyWith(status: LoginStatus.initial,error: null);
+        notifyListeners();
     }
   }
 }

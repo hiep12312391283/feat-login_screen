@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:login_screen/models/user_repository.dart';
 import 'package:login_screen/providers/app_provider.dart';
 import 'package:login_screen/screens/login_page.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +8,6 @@ class HomePage extends StatelessWidget {
 
   void _logout(BuildContext context) async {
     final appProvider = context.read<AppProvider>();
-    UserRepository.setLoggedIn(false);
     appProvider.logout();
     Navigator.pushAndRemoveUntil(
         context,
@@ -17,7 +15,6 @@ class HomePage extends StatelessWidget {
         (Route<dynamic> route) => false);
   }
   
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

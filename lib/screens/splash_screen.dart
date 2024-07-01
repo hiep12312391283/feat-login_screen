@@ -12,20 +12,27 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
-  @override
-  Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 2), () async {
-      final appProvider = context.read<AppProvider>();
+  late final _appProvider = context.read<AppProvider>();
+  void navigatorNextScreen() async {
+    Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) =>
-              appProvider.isLoggedIn ? const HomePage() : const LoginPage(),
+              _appProvider.isLoggedIn ? const HomePage() : const LoginPage(),
         ),
       );
     });
+  }
 
+  @override
+  void initState() {
+    super.initState();
+    navigatorNextScreen();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
         child: CircularProgressIndicator(),
