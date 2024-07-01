@@ -6,11 +6,11 @@ class UserRepository {
   static Future<void> init() async {
     _box = await Hive.openBox('userBox');
   }
+
   static const _taxCodeKey = "taxCode";
   static const _accountKey = "account";
   static const _passwordKey = "password";
   static const _logInKey = "isLoggedIn";
-
 
   static String? get taxCode {
     return _box.get(_taxCodeKey);

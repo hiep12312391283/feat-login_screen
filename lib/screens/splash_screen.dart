@@ -1,27 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:login_screen/models/user_repository.dart';
+import 'package:login_screen/providers/app_provider.dart';
 import 'package:login_screen/screens/login_page.dart';
 import 'package:login_screen/screens/home_page.dart';
+import 'package:provider/provider.dart';
 
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 2), () async {
-      // var loginBox = Hive.box('userBox');
-      // bool isLoggedIn = loginBox.get('isLoggedIn', defaultValue: false);
-      bool loadScreen = UserRepository.isLoggedIn;
+  State<SplashScreen> createState() => _SplashScreenState();
+}
 
+class _SplashScreenState extends State<SplashScreen> {
+  late final _appProvider = context.read<AppProvider>();
+  void navigatorNextScreen() async {
+    Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) =>
-              loadScreen ? const HomePage() : const LoginPage(),
+              _appProvider.isLoggedIn ? const HomePage() : const LoginPage(),
         ),
       );
     });
+  }
 
+  @override
+  void initState() {
+    super.initState();
+    navigatorNextScreen();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
         child: CircularProgressIndicator(),
