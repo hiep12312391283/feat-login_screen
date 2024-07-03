@@ -2,88 +2,22 @@
 import 'package:flutter/material.dart';
 
 import 'package:login_screen/models/fake_account.dart';
+import 'package:login_screen/models/login_state.dart';
 import 'package:login_screen/models/user_repository.dart';
-
-enum LoginStatus {
-  initial,
-  loading,
-  success,
-  error;
-}
-
-class LoginState {
-  final LoginStatus status;
-  final String? error;
-  final bool isObscure;
-  final bool showCloseIcon;
-  final bool showEyeIcon;
-  final String taxCode;
-  final String account;
-  final String password;
-  LoginState({
-    this.status = LoginStatus.initial,
-    this.error,
-    this.isObscure = true,
-    this.showCloseIcon = false,
-    this.showEyeIcon = false,
-    this.taxCode = '',
-    this.account = '',
-    this.password = '',
-  });
-
-  LoginState copyWith({
-    LoginStatus? status,
-    String? error,
-    bool? isObscure,
-    bool? showCloseIcon,
-    bool? showEyeIcon,
-    String? taxCode,
-    String? account,
-    String? password,
-  }) {
-    return LoginState(
-      status: status ?? this.status,
-      error: error ?? this.error,
-      isObscure: isObscure ?? this.isObscure,
-      showCloseIcon: showCloseIcon ?? this.showCloseIcon,
-      showEyeIcon: showEyeIcon ?? this.showEyeIcon,
-      taxCode: taxCode ?? this.taxCode,
-      account: account ?? this.account,
-      password: password ?? this.password,
-    );
-  }
-}
 
 class LoginProvider extends ChangeNotifier {
   LoginState _loginState = LoginState();
   LoginState get loginState => _loginState;
   void setTaxCode(String value) {
-    _loginState = _loginState.copyWith(taxCode: value);
-    updateTaxCodeIcon();
-    notifyListeners();
+    setValueState(taxCode: value);
   }
 
   void setAccount(String value) {
-    _loginState = _loginState.copyWith(account: value);
-    notifyListeners();
+    setValueState(account: value);
   }
 
   void setPassword(String value) {
-    _loginState = _loginState.copyWith(password: value);
-    updatePassWordIcon();
-    notifyListeners();
-  }
-
-  void updateTaxCodeIcon() {
-    _loginState =
-        _loginState.copyWith(showCloseIcon: _loginState.taxCode.isNotEmpty);
-    notifyListeners();
-  }
-
-  void updatePassWordIcon() {
-    _loginState =
-        _loginState.copyWith(showEyeIcon: _loginState.password.isNotEmpty);
-    notifyListeners();
+    setValueState(password: value);
   }
 
   void toggleEyeIcon() {
@@ -104,17 +38,28 @@ class LoginProvider extends ChangeNotifier {
         UserRepository.saveTaxCode(_loginState.taxCode);
         UserRepository.saveAccount(_loginState.account);
         UserRepository.savePassword(_loginState.password);
-      } 
-        else {
-          throw Exception(
-              "Đăng nhập không thành công"); 
-        }
+        notifyListeners();
+      } else {
+        throw Exception("Lỗi hệ thống");
+      }
     } catch (e) {
-      _loginState = _loginState.copyWith(status: LoginStatus.error,error: e.toString());
+      _loginState =
+          _loginState.copyWith(status: LoginStatus.error, error: e.toString());
       notifyListeners();
     } finally {
-        _loginState = _loginState.copyWith(status: LoginStatus.initial,error: null);
-        notifyListeners();
+      _loginState = _loginState.copyWith(
+        status: LoginStatus.initial,
+      );
+      notifyListeners();
     }
+  }
+
+  void setValueState({String? taxCode,account,password}) {
+    _loginState = _loginState.copyWith(
+      taxCode: taxCode ?? _loginState.taxCode,
+      account: account ?? _loginState.account,
+      password: password ?? _loginState.password,
+    );
+    notifyListeners();
   }
 }

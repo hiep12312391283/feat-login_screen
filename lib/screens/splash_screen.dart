@@ -13,6 +13,12 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   late final _appProvider = context.read<AppProvider>();
+
+  @override
+  void initState() {
+    super.initState();
+    navigatorNextScreen();
+  }
   void navigatorNextScreen() async {
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
@@ -23,12 +29,6 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       );
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    navigatorNextScreen();
   }
 
   @override

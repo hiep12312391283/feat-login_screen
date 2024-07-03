@@ -2,6 +2,7 @@
   import 'package:flutter/material.dart';
   import 'package:flutter/services.dart';
   import 'package:flutter_svg/flutter_svg.dart';
+import 'package:login_screen/models/login_state.dart';
   import 'package:provider/provider.dart';
   import 'package:login_screen/models/user_repository.dart';
   import 'package:login_screen/providers/login_provider.dart';
@@ -53,7 +54,7 @@
           break;
         case LoginStatus.error:
           showDialog(
-              context: context, builder: (context) => const CustomDialog());
+              context: context, builder: (context) => const CustomDialog(message: 'Thông tin đăng nhập không hợp lệ',));
           break;
         default:
           break;
@@ -122,7 +123,7 @@
                           controller: _taxCodeController,
                           decoration: InputDecoration(
                             counterText: "",
-                            suffixIcon: loginProvider.loginState.showCloseIcon
+                            suffixIcon: loginProvider.loginState.taxCode.isNotEmpty
                                 ? IconButton(
                                     icon: SvgPicture.asset(
                                         'assets/images/icon_close.svg'),
@@ -214,7 +215,7 @@
                                     const BorderSide(color: Color(0xFFF24E1E))),
                             focusedBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(color: Color(0xFFF24E1E))),
-                            suffixIcon: loginProvider.loginState.showEyeIcon
+                            suffixIcon: loginProvider.loginState.password.isNotEmpty
                                 ? IconButton(
                                     onPressed: loginProvider.toggleEyeIcon,
                                     icon: Icon(
