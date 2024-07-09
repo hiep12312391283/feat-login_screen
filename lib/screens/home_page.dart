@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
         MaterialPageRoute(builder: (context) => const LoginPage()),
         (Route<dynamic> route) => false);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,65 +1,61 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/material.dart';
-
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:login_screen/models/fake_account.dart';
 import 'package:login_screen/models/login_state.dart';
 import 'package:login_screen/models/user_repository.dart';
 
-class LoginProvider extends ChangeNotifier {
-  LoginState _loginState = LoginState();
-  LoginState get loginState => _loginState;
-  void setTaxCode(String value) {
-    setValueState(taxCode: value);
+class LoginProvider extends StateNotifier<LoginState> {
+  LoginProvider() : super(LoginState());
+  void updateState({String? taxCode, String? account, String? password}) {
+    state = state.copyWith(
+      taxCode: taxCode ?? state.taxCode,
+      account: account ?? state.account,
+      password: password ?? state.password,
+    );
   }
+  // void updateState(String taxCode, String account, String password) {
+  //   state = state.copyWith(
+  //     taxCode: taxCode,
+  //     account: account,
+  //     password: password,
+  //   );
+  // }
 
-  void setAccount(String value) {
-    setValueState(account: value);
-  }
-
-  void setPassword(String value) {
-    setValueState(password: value);
-  }
+  // void updateTaxCode(String taxCode) {
+  //   state = state.copyWith(taxCode: taxCode);
+  // }
+  //   void updateAccount(String account) {
+  //   state = state.copyWith(account: account);
+  // }
+  //   void upadatePassword(String password) {
+  //   state = state.copyWith(password: password);
+  // }
 
   void toggleEyeIcon() {
-    _loginState = _loginState.copyWith(isObscure: !_loginState.isObscure);
-    notifyListeners();
+    state = state.copyWith(isObscure: !state.isObscure);
   }
 
   void login() async {
-    _loginState = _loginState.copyWith(status: LoginStatus.loading);
-    notifyListeners();
+    state = state.copyWith(status: LoginStatus.loading);
     await Future.delayed(const Duration(seconds: 1));
     try {
-      if (_loginState.taxCode == FakeAccount.fakeAccount.taxCodeFake &&
-          _loginState.account == FakeAccount.fakeAccount.accountFake &&
-          _loginState.password == FakeAccount.fakeAccount.passwordFake) {
-        _loginState = _loginState.copyWith(status: LoginStatus.success);
+      if (state.taxCode == FakeAccount.fakeAccount.taxCodeFake &&
+          state.account == FakeAccount.fakeAccount.accountFake &&
+          state.password == FakeAccount.fakeAccount.passwordFake) {
+        state = state.copyWith(status: LoginStatus.success);
         UserRepository.setLoggedIn(true);
-        UserRepository.saveTaxCode(_loginState.taxCode);
-        UserRepository.saveAccount(_loginState.account);
-        UserRepository.savePassword(_loginState.password);
-        notifyListeners();
+        UserRepository.saveTaxCode(state.taxCode);
+        UserRepository.saveAccount(state.account);
+        UserRepository.savePassword(state.password);
       } else {
         throw Exception("Lỗi hệ thống");
       }
     } catch (e) {
-      _loginState =
-          _loginState.copyWith(status: LoginStatus.error, error: e.toString());
-      notifyListeners();
+      state = state.copyWith(status: LoginStatus.error, error: e.toString());
     } finally {
-      _loginState = _loginState.copyWith(
+      state = state.copyWith(
         status: LoginStatus.initial,
       );
-      notifyListeners();
     }
-  }
-
-  void setValueState({String? taxCode,account,password}) {
-    _loginState = _loginState.copyWith(
-      taxCode: taxCode ?? _loginState.taxCode,
-      account: account ?? _loginState.account,
-      password: password ?? _loginState.password,
-    );
-    notifyListeners();
   }
 }
