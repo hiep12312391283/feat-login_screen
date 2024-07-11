@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:login_screen/providers/app_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:login_screen/bloc/app/app_bloc.dart';
+import 'package:login_screen/bloc/app/app_event.dart';
+import 'package:login_screen/bloc/app/app_state.dart';
+import 'package:login_screen/bloc/login/login_bloc.dart';
 import 'package:login_screen/screens/login_page.dart';
 import 'package:login_screen/screens/home_page.dart';
-import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,8 +15,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late final _appProvider = context.read<AppProvider>();
-
   @override
   void initState() {
     super.initState();
@@ -22,13 +23,21 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void navigatorNextScreen() async {
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              _appProvider.isLoggedIn ? const HomePage() : const LoginPage(),
-        ),
-      );
+      final appBloc = context.read<AppBloc>();
+      appBloc.add(CheckLoginStatus());
+      appBloc.stream.firstWhere((state) => state is LoggedIn || state is LoggedOut).then((state) {
+        if (state is LoginStarted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+          );
+        }
+      });
     });
   }
 

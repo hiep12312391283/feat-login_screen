@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:login_screen/bloc/app/app_bloc.dart';
 import 'package:login_screen/models/user_repository.dart';
-import 'package:login_screen/providers/app_provider.dart';
 import 'package:login_screen/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +20,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AppProvider()),
+        // BlocProvider(create:(context) => LoginBloc()),
+        BlocProvider(create:(context) => AppBloc())
+        // ChangeNotifierProvider(create: (_) => AppProvider()),
       ],
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
