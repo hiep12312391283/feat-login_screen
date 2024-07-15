@@ -8,11 +8,11 @@ sealed class LoginEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoginStarted extends LoginEvent {
+class LoginStartedEvent extends LoginEvent {
   final String taxCode;
   final String account;
   final String password;
-  const LoginStarted({
+  const LoginStartedEvent({
     required this.taxCode,
     required this.account,
     required this.password,
@@ -21,32 +21,29 @@ class LoginStarted extends LoginEvent {
   List<Object> get props => [taxCode, account, password];
 }
 
-class TaxCodeChanged extends LoginEvent {
+class TaxCodeChangedEvent extends LoginEvent {
   final String taxCode;
-  final bool showCloseIcon;
-  const TaxCodeChanged({required this.taxCode, this.showCloseIcon = false});
+  const TaxCodeChangedEvent({required this.taxCode});
   @override
-  List<Object> get props => [taxCode,showCloseIcon];
+  List<Object> get props => [taxCode];
 }
 
-class AccountChanged extends LoginEvent {
+class AccountChangedEvent extends LoginEvent {
   final String account;
-  const AccountChanged({required this.account});
+  const AccountChangedEvent({required this.account});
   @override
   List<Object> get props => [account];
 }
 
-class PasswordChanged extends LoginEvent {
+class PasswordChangedEvent extends LoginEvent {
   final String password;
-  const PasswordChanged({required this.password});
+  const PasswordChangedEvent({required this.password});
   @override
   List<Object> get props => [password];
 }
 
-class IconTaxCodeClear extends LoginEvent {}
+class IconTaxCodeClearEvent extends LoginEvent {}
 
-class LoginButtonPressed extends LoginEvent {}
+class LoginButtonPressedEvent extends LoginEvent {}
 
-class LoginToggleEye extends LoginEvent {}
-
-class ShowCloseIcon extends LoginEvent {}
+class LoginToggleEyeEvent extends LoginEvent {}

@@ -12,23 +12,26 @@ class LoginState extends Equatable {
   final LoginStatus status;
   final String? error;
   final bool isObscure;
-  final bool showCloseIcon;
   final String taxCode;
   final String account;
   final String password;
   const LoginState({
     this.status = LoginStatus.initial,
     this.error,
-    this.showCloseIcon = false,
     this.isObscure = true,
     this.taxCode = '',
     this.account = '',
     this.password = '',
   });
+  factory LoginState.initial() {
+    return const LoginState(
+      status: LoginStatus.initial,
+    );
+  }
+
   LoginState copyWith({
     LoginStatus? status,
     String? error,
-    bool? showCloseIcon,
     bool? isObscure,
     String? taxCode,
     String? account,
@@ -37,7 +40,6 @@ class LoginState extends Equatable {
     return LoginState(
       status: status ?? this.status,
       error: error ?? this.error,
-      showCloseIcon: showCloseIcon ?? this.showCloseIcon,
       isObscure: isObscure ?? this.isObscure,
       taxCode: taxCode ?? this.taxCode,
       account: account ?? this.account,
@@ -47,13 +49,6 @@ class LoginState extends Equatable {
 
   @override
   List<Object?> get props =>
-      [status, error, isObscure,showCloseIcon, taxCode, account, password];
+      [status, error, isObscure, taxCode, account, password];
 }
 
-class LoginInitial extends LoginState {
-  @override
-  const LoginInitial()
-      : super(
-          status: LoginStatus.initial,
-        );
-}

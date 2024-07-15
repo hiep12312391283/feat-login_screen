@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
 import 'package:login_screen/models/fake_account.dart';
 import 'package:login_screen/models/user_repository.dart';
 
@@ -8,39 +9,40 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(const LoginState()) {
-    on<TaxCodeChanged>(_onTaxCodeChanged);
-    on<AccountChanged>(_onAccountChanged);
-    on<PasswordChanged>(_onPaswordChanged);
-    on<LoginStarted>(_onLoginStarted);
-    on<LoginToggleEye>(_onLoginToggleEye);
-    on<LoginButtonPressed>(_onLoginButtonPressed);
+    on<TaxCodeChangedEvent>(_onTaxCodeChanged);
+    on<AccountChangedEvent>(_onAccountChanged);
+    on<PasswordChangedEvent>(_onPaswordChanged);
+    on<LoginStartedEvent>(_onLoginStarted);
+    on<LoginToggleEyeEvent>(_onLoginToggleEye);
+    on<LoginButtonPressedEvent>(_onLoginButtonPressed);
   }
 
-  void _onTaxCodeChanged(TaxCodeChanged event, Emitter<LoginState> emit) {
-    emit(state.copyWith(taxCode: event.taxCode, showCloseIcon: event.taxCode.isNotEmpty));
+  void _onTaxCodeChanged(TaxCodeChangedEvent event, Emitter<LoginState> emit) {
+    emit(state.copyWith(
+        taxCode: event.taxCode));
   }
 
-  void _onAccountChanged(AccountChanged event, Emitter<LoginState> emit) {
+  void _onAccountChanged(AccountChangedEvent event, Emitter<LoginState> emit) {
     emit(state.copyWith(account: event.account));
   }
 
-  void _onPaswordChanged(PasswordChanged event, Emitter<LoginState> emit) {
+  void _onPaswordChanged(PasswordChangedEvent event, Emitter<LoginState> emit) {
     emit(state.copyWith(password: event.password));
   }
 
-  void _onLoginStarted(LoginStarted event, Emitter<LoginState> emit) {
+  void _onLoginStarted(LoginStartedEvent event, Emitter<LoginState> emit) {
     emit(state.copyWith(
         taxCode: event.taxCode,
         account: event.account,
         password: event.password));
   }
 
-  void _onLoginToggleEye(LoginToggleEye event, Emitter<LoginState> emit) {
+  void _onLoginToggleEye(LoginToggleEyeEvent event, Emitter<LoginState> emit) {
     emit(state.copyWith(isObscure: !state.isObscure));
   }
 
   void _onLoginButtonPressed(
-      LoginButtonPressed event, Emitter<LoginState> emit) async {
+      LoginButtonPressedEvent event, Emitter<LoginState> emit) async {
     emit(state.copyWith(status: LoginStatus.loading));
     await Future.delayed(const Duration(seconds: 1));
     try {

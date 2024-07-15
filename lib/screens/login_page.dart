@@ -42,7 +42,7 @@ class _LoginViewState extends State<LoginView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        context.read<LoginBloc>().add(LoginStarted(
+        context.read<LoginBloc>().add(LoginStartedEvent(
               taxCode: _taxCodeController.text,
               account: _accountController.text,
               password: _passwordController.text,
@@ -52,7 +52,6 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void listenLoginStatus(BuildContext context, LoginState state) {
-    final status = state.status;
     print("Login status: ${state.status}");
     switch (state.status) {
       case LoginStatus.success:
@@ -65,10 +64,7 @@ class _LoginViewState extends State<LoginView> {
         break;
       case LoginStatus.error:
         showDialog(
-            context: context,
-            builder: (context) => const CustomDialog(
-                  message: 'Thông tin đăng nhập không hợp lệ',
-                ));
+            context: context, builder: (context) => const CustomDialog());
         break;
       default:
         break;
@@ -81,7 +77,7 @@ class _LoginViewState extends State<LoginView> {
       _validateMode = AutovalidateMode.always;
     });
     if (_formKey.currentState!.validate()) {
-      context.read<LoginBloc>().add(LoginButtonPressed());
+      context.read<LoginBloc>().add(LoginButtonPressedEvent());
     }
   }
 
@@ -99,7 +95,7 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: BlocListener<LoginBloc, LoginState>(
-        listener:listenLoginStatus,
+        listener: listenLoginStatus,
         child: BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
             return Stack(
@@ -144,7 +140,9 @@ class _LoginViewState extends State<LoginView> {
                                         icon: SvgPicture.asset(
                                             'assets/images/icon_close.svg'),
                                         onPressed: () {
-                                          _loginBloc.add(const TaxCodeChanged(taxCode: ''));
+                                          _loginBloc.add(
+                                              const TaxCodeChangedEvent(
+                                                  taxCode: ''));
                                           _taxCodeController.clear();
                                         },
                                       )
@@ -161,7 +159,8 @@ class _LoginViewState extends State<LoginView> {
                                         BorderSide(color: Color(0xFFF24E1E))),
                               ),
                               onChanged: (value) {
-                                _loginBloc.add(TaxCodeChanged(taxCode: value));
+                                _loginBloc
+                                    .add(TaxCodeChangedEvent(taxCode: value));
                               },
                               validator: (value) {
                                 if (value == null ||
@@ -197,7 +196,8 @@ class _LoginViewState extends State<LoginView> {
                                         BorderSide(color: Color(0xFFF24E1E))),
                               ),
                               onChanged: (value) {
-                                _loginBloc.add(AccountChanged(account: value));
+                                _loginBloc
+                                    .add(AccountChangedEvent(account: value));
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -219,7 +219,7 @@ class _LoginViewState extends State<LoginView> {
                             TextFormField(
                               onChanged: (value) {
                                 _loginBloc
-                                    .add(PasswordChanged(password: value));
+                                    .add(PasswordChangedEvent(password: value));
                               },
                               validator: (value) {
                                 if (value == null ||
@@ -245,7 +245,7 @@ class _LoginViewState extends State<LoginView> {
                                 suffixIcon: _passwordController.text.isNotEmpty
                                     ? IconButton(
                                         onPressed: () {
-                                          _loginBloc.add(LoginToggleEye());
+                                          _loginBloc.add(LoginToggleEyeEvent());
                                         },
                                         icon: Icon(
                                           state.isObscure
