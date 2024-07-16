@@ -1,44 +1,49 @@
+import 'package:get/get.dart';
 
 enum LoginStatus {
   initial,
   loading,
   success,
-  error;
+  error,
 }
 
 class LoginState {
-  final LoginStatus status;
-  final String? error;
-  final bool isObscure;
-  final String taxCode;
-  final String account;
-  final String password;
+  final Rx<LoginStatus> status;
+  final RxString error;
+  final RxBool isObscure;
+  final RxString taxCode;
+  final RxString account;
+  final RxString password;
+
   LoginState({
-    this.status = LoginStatus.initial,
-    this.error,
-    this.isObscure = true,
-    this.taxCode = '',
-    this.account = '',
-    this.password = '',
-  });
+    LoginStatus status = LoginStatus.initial,
+    String error = '',
+    bool isObscure = true,
+    String taxCode = '',
+    String account = '',
+    String password = '',
+  })  : status = status.obs,
+        error = error.obs,
+        isObscure = isObscure.obs,
+        taxCode = taxCode.obs,
+        account = account.obs,
+        password = password.obs;
 
   LoginState copyWith({
     LoginStatus? status,
     String? error,
     bool? isObscure,
-    bool? showCloseIcon,
-    bool? showEyeIcon,
     String? taxCode,
     String? account,
     String? password,
   }) {
     return LoginState(
-      status: status ?? this.status,
-      error: error ?? this.error,
-      isObscure: isObscure ?? this.isObscure,
-      taxCode: taxCode ?? this.taxCode,
-      account: account ?? this.account,
-      password: password ?? this.password,
+      status: status ?? this.status.value,
+      error: error ?? this.error.value,
+      isObscure: isObscure ?? this.isObscure.value,
+      taxCode: taxCode ?? this.taxCode.value,
+      account: account ?? this.account.value,
+      password: password ?? this.password.value,
     );
   }
 }

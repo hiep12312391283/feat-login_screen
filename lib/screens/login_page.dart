@@ -6,7 +6,7 @@ import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:login_screen/models/login_state.dart';
 import 'package:login_screen/models/user_repository.dart';
-import 'package:login_screen/providers/login_provider.dart';
+import 'package:login_screen/providers/login_controller.dart';
 import 'package:login_screen/screens/custom/custom_dialog.dart';
 import 'package:login_screen/screens/custom/custom_iconbutton.dart';
 import 'package:login_screen/screens/home_page.dart';
@@ -198,7 +198,8 @@ class _LoginViewState extends State<LoginView> {
                               borderSide: BorderSide(color: Color(0xFFF24E1E))),
                         ),
                         onChanged: (value) {
-                          _loginProvider.updateState(account: _accountController.text);
+                          _loginProvider.updateState(
+                              account: _accountController.text);
                         },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -219,7 +220,8 @@ class _LoginViewState extends State<LoginView> {
                       const SizedBox(height: 8),
                       TextFormField(
                         onChanged: (value) {
-                          _loginProvider.updateState(password: _passwordController.text);
+                          _loginProvider.updateState(
+                              password: _passwordController.text);
                         },
                         validator: (value) {
                           if (value == null ||

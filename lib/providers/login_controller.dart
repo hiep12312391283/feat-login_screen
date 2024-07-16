@@ -1,35 +1,18 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:login_screen/models/fake_account.dart';
 import 'package:login_screen/models/login_state.dart';
 import 'package:login_screen/models/user_repository.dart';
+import 'package:get/get.dart';
 
-class LoginProvider extends StateNotifier<LoginState> {
-  LoginProvider() : super(LoginState());
+class LoginController extends GetxController {
+  var loginState = LoginState().obs;
   void updateState({String? taxCode, String? account, String? password}) {
-    state = state.copyWith(
+    loginState = state.copyWith(
       taxCode: taxCode ?? state.taxCode,
       account: account ?? state.account,
       password: password ?? state.password,
     );
   }
-  // void updateState(String taxCode, String account, String password) {
-  //   state = state.copyWith(
-  //     taxCode: taxCode,
-  //     account: account,
-  //     password: password,
-  //   );
-  // }
-
-  // void updateTaxCode(String taxCode) {
-  //   state = state.copyWith(taxCode: taxCode);
-  // }
-  //   void updateAccount(String account) {
-  //   state = state.copyWith(account: account);
-  // }
-  //   void upadatePassword(String password) {
-  //   state = state.copyWith(password: password);
-  // }
 
   void toggleEyeIcon() {
     state = state.copyWith(isObscure: !state.isObscure);
