@@ -64,7 +64,9 @@ class _LoginViewState extends State<LoginView> {
         break;
       case LoginStatus.error:
         showDialog(
-            context: context, builder: (context) => const CustomDialog());
+            context: context,
+            builder: (context) => CustomDialog(
+                message: state.error ?? 'Thông tin đăng nhập không hợp lệ'));
         break;
       default:
         break;

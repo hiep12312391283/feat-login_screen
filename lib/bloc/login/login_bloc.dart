@@ -8,7 +8,7 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(const LoginState()) {
+  LoginBloc() : super(LoginState.initial()) {
     on<TaxCodeChangedEvent>(_onTaxCodeChanged);
     on<AccountChangedEvent>(_onAccountChanged);
     on<PasswordChangedEvent>(_onPaswordChanged);
@@ -18,8 +18,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void _onTaxCodeChanged(TaxCodeChangedEvent event, Emitter<LoginState> emit) {
-    emit(state.copyWith(
-        taxCode: event.taxCode));
+    emit(state.copyWith(taxCode: event.taxCode));
   }
 
   void _onAccountChanged(AccountChangedEvent event, Emitter<LoginState> emit) {
@@ -49,13 +48,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (state.taxCode == FakeAccount.fakeAccount.taxCodeFake &&
           state.account == FakeAccount.fakeAccount.accountFake &&
           state.password == FakeAccount.fakeAccount.passwordFake) {
-        emit(state.copyWith(status: LoginStatus.success));
+        emit(state.copyWith(status: LoginStatus.success, error: null));
         UserRepository.setLoggedIn(true);
         UserRepository.saveTaxCode(state.taxCode);
         UserRepository.saveAccount(state.account);
         UserRepository.savePassword(state.password);
       } else {
-        throw Exception("Lỗi hệ thống");
+        emit(state.copyWith(
+          status: LoginStatus.error,
+        ));
       }
     } catch (e) {
       emit(state.copyWith(status: LoginStatus.error, error: e.toString()));

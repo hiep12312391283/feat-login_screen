@@ -15,17 +15,23 @@ class LoginState extends Equatable {
   final String taxCode;
   final String account;
   final String password;
-  const LoginState({
-    this.status = LoginStatus.initial,
+
+  LoginState({
+    required this.status,
     this.error,
-    this.isObscure = true,
-    this.taxCode = '',
-    this.account = '',
-    this.password = '',
+    required this.isObscure,
+    required this.taxCode,
+    required this.account,
+    required this.password,
   });
   factory LoginState.initial() {
-    return const LoginState(
+    return LoginState(
       status: LoginStatus.initial,
+      error: null,
+      isObscure: true,
+      taxCode: '',
+      account: '',
+      password: '',
     );
   }
 
@@ -51,4 +57,3 @@ class LoginState extends Equatable {
   List<Object?> get props =>
       [status, error, isObscure, taxCode, account, password];
 }
-

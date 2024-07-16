@@ -11,7 +11,6 @@ class FakeAccount {
 
   static FakeAccount fakeAccount = FakeAccount(
       taxCodeFake: '0123456789', accountFake: 'demo', passwordFake: '12345678');
-  
 
   FakeAccount copyWith({
     String? taxCodeFake,
