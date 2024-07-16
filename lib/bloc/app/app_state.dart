@@ -1,13 +1,14 @@
-// app_state.dart
 import 'package:equatable/equatable.dart';
 
 abstract class AppState extends Equatable {
-  const AppState();
+  final bool isLoggedIn;
+
+  const AppState({required this.isLoggedIn});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [isLoggedIn];
 }
 
-class LoggedInState extends AppState {}
-
-class LoggedOutState extends AppState {}
+class LoadedState extends AppState {
+  const LoadedState(bool isLoggedIn) : super(isLoggedIn: false);
+}

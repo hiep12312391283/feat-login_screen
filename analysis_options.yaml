@@ -9,9 +9,7 @@
 # packages, and plugins designed to encourage good coding practices.
 analyzer:
   errors:
-    non_constant_identifier_names: ignore
-  # errors:
-    # unused_local_variable: ignore 
+    unused_local_variable: false
 include: package:flutter_lints/flutter.yaml
 
 linter:
