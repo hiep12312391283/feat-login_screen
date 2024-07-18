@@ -9,5 +9,3 @@ abstract class AppEvent extends Equatable {
 }
 
 class LogoutEvent extends AppEvent {}
-
-class IsLoggedInEvent extends AppEvent{}

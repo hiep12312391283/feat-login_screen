@@ -52,7 +52,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void listenLoginStatus(BuildContext context, LoginState state) {
-    print("Login status: ${state.status}");
+    // print("Login status: ${state.status}");
     switch (state.status) {
       case LoginStatus.success:
         Navigator.pushReplacement(

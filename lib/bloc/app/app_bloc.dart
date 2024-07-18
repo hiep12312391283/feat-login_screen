@@ -4,13 +4,10 @@ import 'app_event.dart';
 import 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
-  AppBloc() : super(LoadedState(UserRepository.isLoggedIn)) {
+  AppBloc() : super(AppState(isLoggedIn: UserRepository.isLoggedIn)) {
     on<LogoutEvent>((event, emit) {
-      UserRepository.setLoggedIn(false);
-      emit(LoadedState(UserRepository.isLoggedIn));
-    });
-    on<IsLoggedInEvent>((event, emit) {
-      emit(LoadedState(UserRepository.isLoggedIn));
+      UserRepository.setLoggedIn(UserRepository.isLoggedIn);
+      emit(AppState(isLoggedIn: UserRepository.isLoggedIn));
     });
   }
 }
