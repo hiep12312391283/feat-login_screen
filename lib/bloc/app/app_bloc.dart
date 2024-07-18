@@ -9,5 +9,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       UserRepository.setLoggedIn(false);
       emit(LoadedState(UserRepository.isLoggedIn));
     });
+    on<IsLoggedInEvent>((event, emit) {
+      emit(LoadedState(UserRepository.isLoggedIn));
+    });
   }
 }

@@ -16,7 +16,7 @@ class LoginState extends Equatable {
   final String account;
   final String password;
 
-  LoginState({
+  const LoginState({
     required this.status,
     this.error,
     required this.isObscure,
@@ -25,7 +25,7 @@ class LoginState extends Equatable {
     required this.password,
   });
   factory LoginState.initial() {
-    return LoginState(
+    return const LoginState(
       status: LoginStatus.initial,
       error: null,
       isObscure: true,
