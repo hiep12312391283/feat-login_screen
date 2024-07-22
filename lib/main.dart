@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:login_screen/controllers/app_controller.dart';
+import 'package:login_screen/controllers/login_controller.dart';
 import 'package:login_screen/models/user_repository.dart';
-import 'package:login_screen/providers/app_provider.dart';
-import 'package:login_screen/screens/splash_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:login_screen/views/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,17 +18,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AppProvider()),
-      ],
-      child: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: const MaterialApp(
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          home: SplashScreen(),
-        ),
-      ),
+          home: const SplashScreen(),
+          initialBinding: BindingsBuilder(() {
+            Get.put<AppController>(AppController());
+            Get.put<LoginController>(LoginController());
+          })),
     );
   }
 }

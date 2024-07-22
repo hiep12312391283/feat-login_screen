@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:login_screen/providers/app_provider.dart';
-import 'package:login_screen/screens/login_page.dart';
-import 'package:login_screen/screens/home_page.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import 'package:login_screen/controllers/app_controller.dart';
+import 'package:login_screen/views/home_page_screen.dart';
+import 'package:login_screen/views/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,7 +12,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late final _appProvider = context.read<AppProvider>();
+  final _appController = Get.find<AppController>();
 
   @override
   void initState() {
@@ -21,13 +21,10 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigatorNextScreen() async {
+    print('${_appController.isLoggedIn}');
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              _appProvider.isLoggedIn ? const HomePage() : const LoginPage(),
-        ),
+      Get.offAll(
+        _appController.isLoggedIn ? const HomePage() : const LoginView(),
       );
     });
   }
