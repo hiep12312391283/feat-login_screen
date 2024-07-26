@@ -19,6 +19,7 @@
     flutter_bloc: ^8.1.6
     flutter_state_notifier: ^1.0.0
     get: ^4.6.6
+    http: ^1.2.2
 
   dev_dependencies:
     flutter_test:

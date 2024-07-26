@@ -22,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void navigatorNextScreen() async {
     print('${_appController.isLoggedIn}');
+    
     Future.delayed(const Duration(seconds: 2), () {
       Get.offAll(
         _appController.isLoggedIn ? const HomePage() : const LoginView(),
