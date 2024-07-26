@@ -57,18 +57,18 @@ class _LoginViewState extends State<LoginView> {
                               controller: loginController.taxCodeController,
                               decoration: InputDecoration(
                                 counterText: "",
-                                suffixIcon:
-                                    loginController.taxCode.value.isNotEmpty
-                                        ? IconButton(
-                                            icon: SvgPicture.asset(
-                                                'assets/images/icon_close.svg'),
-                                            onPressed: () {
-                                              loginController.taxCodeController
-                                                  .clear();
-                                              loginController.setTaxCode(loginController.taxCodeController.text);
-                                            },
-                                          )
-                                        : null,
+                                suffixIcon: loginController
+                                        .taxCode.value.isNotEmpty
+                                    ? IconButton(
+                                        icon: SvgPicture.asset(
+                                            'assets/images/icon_close.svg'),
+                                        onPressed: () {
+                                          loginController.taxCodeController
+                                              .clear();
+                                          loginController.taxCode.value = '';
+                                        },
+                                      )
+                                    : null,
                                 hintText: 'Mã số thuế',
                                 hintStyle: const TextStyle(
                                     fontWeight: FontWeight.w400),
@@ -81,7 +81,8 @@ class _LoginViewState extends State<LoginView> {
                                         BorderSide(color: Color(0xFFF24E1E))),
                               ),
                               onChanged: (value) {
-                                loginController.taxCode.value;
+                                loginController.setTaxCode(
+                                    loginController.taxCodeController.text);
                               },
                               validator: (value) {
                                 if (value == null ||
@@ -91,8 +92,7 @@ class _LoginViewState extends State<LoginView> {
                                 }
                                 return null;
                               },
-                            
-                          ),
+                            ),
                             const SizedBox(height: 16),
 
                             //Tài khoản
