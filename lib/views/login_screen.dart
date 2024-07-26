@@ -13,7 +13,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final loginController = Get.put(LoginController());
+  final LoginController loginController = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {

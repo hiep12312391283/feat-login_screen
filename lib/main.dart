@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           home: const SplashScreen(),
           initialBinding: GlobalBinding(),
+          initialRoute: '/login',
           getPages: [
             GetPage(
                 name: '/login',
