@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:login_screen/binding/global_binding.dart';
 import 'package:login_screen/binding/login_binding.dart';
 import 'package:login_screen/models/user_repository.dart';
+import 'package:login_screen/views/home_page_screen.dart';
 import 'package:login_screen/views/login_screen.dart';
 import 'package:login_screen/views/splash_screen.dart';
 
@@ -26,12 +27,15 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           home: const SplashScreen(),
           initialBinding: GlobalBinding(),
-          initialRoute: '/login',
           getPages: [
             GetPage(
                 name: '/login',
                 page: () => const LoginView(),
-                binding: LoginBinding())
+                binding: LoginBinding()),
+            GetPage(
+                name: '/home',
+                page: () => const HomePage(),
+                binding: GlobalBinding())
           ]),
     );
   }

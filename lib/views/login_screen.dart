@@ -5,15 +5,8 @@ import 'package:get/get.dart';
 import 'package:login_screen/controllers/login_controller.dart';
 import 'package:login_screen/views/custom/custom_iconbutton.dart';
 
-class LoginView extends StatefulWidget {
+class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
-
-  @override
-  State<LoginView> createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView> {
-  final LoginController loginController = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +16,8 @@ class _LoginViewState extends State<LoginView> {
           return Stack(
             children: [
               Form(
-                  key: loginController.formKey,
-                  autovalidateMode: loginController.validateMode.value,
+                  key: controller.formKey,
+                  autovalidateMode: controller.validateMode.value,
                   child: SafeArea(
                     child: SingleChildScrollView(
                       child: Padding(
@@ -54,18 +47,18 @@ class _LoginViewState extends State<LoginView> {
                               inputFormatters: <TextInputFormatter>[
                                 FilteringTextInputFormatter.digitsOnly
                               ],
-                              controller: loginController.taxCodeController,
+                              controller: controller.taxCodeController,
                               decoration: InputDecoration(
                                 counterText: "",
-                                suffixIcon: loginController
+                                suffixIcon: controller
                                         .taxCode.value.isNotEmpty
                                     ? IconButton(
                                         icon: SvgPicture.asset(
                                             'assets/images/icon_close.svg'),
                                         onPressed: () {
-                                          loginController.taxCodeController
+                                          controller.taxCodeController
                                               .clear();
-                                          loginController.taxCode.value = '';
+                                          controller.taxCode.value = '';
                                         },
                                       )
                                     : null,
@@ -81,8 +74,8 @@ class _LoginViewState extends State<LoginView> {
                                         BorderSide(color: Color(0xFFF24E1E))),
                               ),
                               onChanged: (value) {
-                                loginController.setTaxCode(
-                                    loginController.taxCodeController.text);
+                                controller.setTaxCode(
+                                    controller.taxCodeController.text);
                               },
                               validator: (value) {
                                 if (value == null ||
@@ -104,7 +97,7 @@ class _LoginViewState extends State<LoginView> {
                             const SizedBox(height: 8),
 
                             TextFormField(
-                              controller: loginController.accountController,
+                              controller: controller.accountController,
                               decoration: InputDecoration(
                                 hintText: 'Tài khoản',
                                 hintStyle: const TextStyle(
@@ -118,7 +111,7 @@ class _LoginViewState extends State<LoginView> {
                                         BorderSide(color: Color(0xFFF24E1E))),
                               ),
                               onChanged: (value) {
-                                loginController.accountController.text;
+                                controller.accountController.text;
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -146,11 +139,11 @@ class _LoginViewState extends State<LoginView> {
                                 }
                                 return null;
                               },
-                              obscureText: loginController.isObscure.value,
-                              controller: loginController.passwordController,
+                              obscureText: controller.isObscure.value,
+                              controller: controller.passwordController,
                               onChanged: (value) {
-                                loginController.setPassword(
-                                    loginController.passwordController.text);
+                                controller.setPassword(
+                                    controller.passwordController.text);
                               },
                               decoration: InputDecoration(
                                 hintText: 'Mật khẩu',
@@ -164,12 +157,12 @@ class _LoginViewState extends State<LoginView> {
                                     borderSide:
                                         BorderSide(color: Color(0xFFF24E1E))),
                                 suffixIcon:
-                                    loginController.password.value.isNotEmpty
+                                    controller.password.value.isNotEmpty
                                         ? IconButton(
                                             onPressed:
-                                                loginController.toggleEyeIcon,
+                                                controller.toggleEyeIcon,
                                             icon: Icon(
-                                              loginController.isObscure.value
+                                              controller.isObscure.value
                                                   ? Icons.visibility
                                                   : Icons.visibility_off,
                                               color: Colors.grey,
@@ -181,7 +174,7 @@ class _LoginViewState extends State<LoginView> {
 
                             //Button đăng nhập
                             ElevatedButton(
-                              onPressed: loginController.login,
+                              onPressed: controller.login,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFFF24E1E),
                                 shape: RoundedRectangleBorder(
@@ -228,7 +221,7 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     ),
                   )),
-              if (loginController.isLoading.value == true)
+              if (controller.isLoading.value == true)
                 const Center(child: CircularProgressIndicator()),
             ],
           );

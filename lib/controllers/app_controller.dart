@@ -6,6 +6,5 @@ class AppController extends GetxController {
 
   void logout() {
     UserRepository.setLoggedIn(false);
-    update();
   }
 }

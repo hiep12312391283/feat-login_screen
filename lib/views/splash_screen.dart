@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:login_screen/controllers/app_controller.dart';
-import 'package:login_screen/views/home_page_screen.dart';
-import 'package:login_screen/views/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,11 +20,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void navigatorNextScreen() async {
     print('${_appController.isLoggedIn}');
-    
     Future.delayed(const Duration(seconds: 2), () {
-      Get.offAll(
-        _appController.isLoggedIn ? const HomePage() : const LoginView(),
-      );
+      Get.offAllNamed(_appController.isLoggedIn ? '/home' : '/login');
     });
   }
 

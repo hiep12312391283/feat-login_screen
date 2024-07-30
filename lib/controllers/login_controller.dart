@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:login_screen/models/fake_account.dart';
 import 'package:login_screen/models/user_repository.dart';
 import 'package:login_screen/views/custom/custom_dialog.dart';
-import 'package:login_screen/views/home_page_screen.dart';
 
 class LoginController extends GetxController {
   final taxCodeController = TextEditingController(text: UserRepository.taxCode);
@@ -44,12 +43,13 @@ class LoginController extends GetxController {
           UserRepository.saveTaxCode(taxCodeController.text);
           UserRepository.saveAccount(accountController.text);
           UserRepository.savePassword(passwordController.text);
-          Get.offAll(() => const HomePage());
+          Get.offAllNamed('/home');
         } else {
-          Get.dialog(
-              CustomDialog(message: error.value ?? 'Thông tin đăng nhập sai'));
+          throw Exception('Thông tin đăng nhập không chính xác');
         }
       } catch (e) {
+        Get.dialog(
+            CustomDialog(message: error.value ?? 'Thông tin đăng nhập sai'));
         error.value = e.toString();
       } finally {
         isLoading.value = false;

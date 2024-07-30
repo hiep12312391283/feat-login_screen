@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:login_screen/controllers/app_controller.dart';
-import 'package:login_screen/views/login_screen.dart';
 
-class HomePage extends StatelessWidget {
+
+class HomePage extends GetView<AppController> {
   const HomePage({super.key});
 
   void _logout() {
-    final AppController appController = Get.find<AppController>();
-    appController.logout();
-    Get.offAll(() => const LoginView());
+    controller.logout();
+    Get.offAllNamed('/login');
   }
 
   @override
