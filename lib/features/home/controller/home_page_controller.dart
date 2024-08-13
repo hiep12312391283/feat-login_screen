@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 import 'package:login_screen/base/hive_service.dart';
-import 'package:login_screen/base/product.dart';
+import 'package:login_screen/features/home/models/home_response.dart';
 
 class HomeController extends GetxController {
-  var products = <Product>[].obs;
+  var products = <HomeResponse>[].obs;
   var isLoading = false.obs;
   var page = 1.obs;
   final Dio dio = Dio();
@@ -36,8 +36,8 @@ class HomeController extends GetxController {
 
       if (response.data != null && response.data['products'] != null) {
         print('${response.statusCode}');
-        List<Product> fetchedProducts = (response.data['products'] as List)
-            .map((data) => Product.fromJson(data))
+        List<HomeResponse> fetchedProducts = (response.data['products'] as List)
+            .map((data) => HomeResponse.fromJson(data))
             .toList();
 
         if (page.value == 1) {

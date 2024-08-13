@@ -60,13 +60,13 @@ class HomePage extends GetView<AppController> {
             itemCount: homeController.products.length,
             itemBuilder: (context, index) {
               final product = homeController.products[index];
-              return ListTile(
-                title: Text(product.name),
-                subtitle: Text('\$${product.price}'),
-                onTap: () {
-                  print('Tapped on ${product.name}');
-                },
-              );
+              // return ListTile(
+              //   title: Text(product.name),
+              //   subtitle: Text('\$${product.price}'),
+              //   onTap: () {
+              //     print('Tapped on ${product.name}');
+              //   },
+              // );
             },
           );
         }
