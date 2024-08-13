@@ -50,14 +50,12 @@ class LoginView extends GetView<LoginController> {
                               controller: controller.taxCodeController,
                               decoration: InputDecoration(
                                 counterText: "",
-                                suffixIcon: controller
-                                        .taxCode.value.isNotEmpty
+                                suffixIcon: controller.taxCode.value.isNotEmpty
                                     ? IconButton(
                                         icon: SvgPicture.asset(
                                             'assets/images/icon_close.svg'),
                                         onPressed: () {
-                                          controller.taxCodeController
-                                              .clear();
+                                          controller.taxCodeController.clear();
                                           controller.taxCode.value = '';
                                         },
                                       )
@@ -133,7 +131,7 @@ class LoginView extends GetView<LoginController> {
                             TextFormField(
                               validator: (value) {
                                 if (value == null ||
-                                    value.length < 8 ||
+                                    value.length < 6 ||
                                     value.length > 50) {
                                   return 'Mật khẩu phải từ 8 đến 50 ký tự';
                                 }
@@ -156,25 +154,25 @@ class LoginView extends GetView<LoginController> {
                                 focusedBorder: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFF24E1E))),
-                                suffixIcon:
-                                    controller.password.value.isNotEmpty
-                                        ? IconButton(
-                                            onPressed:
-                                                controller.toggleEyeIcon,
-                                            icon: Icon(
-                                              controller.isObscure.value
-                                                  ? Icons.visibility
-                                                  : Icons.visibility_off,
-                                              color: Colors.grey,
-                                            ))
-                                        : null,
+                                suffixIcon: controller.password.value.isNotEmpty
+                                    ? IconButton(
+                                        onPressed: controller.toggleEyeIcon,
+                                        icon: Icon(
+                                          controller.isObscure.value
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
+                                          color: Colors.grey,
+                                        ))
+                                    : null,
                               ),
                             ),
                             const SizedBox(height: 20),
 
                             //Button đăng nhập
                             ElevatedButton(
-                              onPressed: controller.login,
+                              onPressed: () {
+                                controller.login();
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFFF24E1E),
                                 shape: RoundedRectangleBorder(

@@ -3,15 +3,16 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:login_screen/binding/global_binding.dart';
 import 'package:login_screen/binding/login_binding.dart';
-import 'package:login_screen/models/user_repository.dart';
+import 'package:login_screen/models/hive_service.dart';
 import 'package:login_screen/views/home_page_screen.dart';
 import 'package:login_screen/views/login_screen.dart';
+
 import 'package:login_screen/views/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await UserRepository.init();
+  await HiveService.init();
 
   runApp(const MyApp());
 }
@@ -34,8 +35,11 @@ class MyApp extends StatelessWidget {
                 binding: LoginBinding()),
             GetPage(
                 name: '/home',
-                page: () => const HomePage(),
-                binding: GlobalBinding())
+                page: () => HomePage(),
+                binding: GlobalBinding()),
+            // GetPage(
+            //     name: '/productDetail',
+            //     page: () => const ProductDetailScreen())
           ]),
     );
   }

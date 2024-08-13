@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import 'package:login_screen/models/user_repository.dart';
+import 'package:login_screen/models/hive_service.dart';
 
 class AppController extends GetxController {
-  bool get isLoggedIn => UserRepository.isLoggedIn;
+  bool get isLoggedIn => HiveService.isLoggedIn;
 
   void logout() {
-    UserRepository.setLoggedIn(false);
+    HiveService.setLoggedIn(false);
   }
 }

@@ -1,7 +1,8 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
-class UserRepository {
+class HiveService {
   static late final Box _box;
+  static const tokenKey = 'authToken';
 
   static Future<void> init() async {
     _box = await Hive.openBox('userBox');
@@ -11,9 +12,22 @@ class UserRepository {
   static const _accountKey = "account";
   static const _passwordKey = "password";
   static const _logInKey = "isLoggedIn";
+  static const _token = "token";
 
   static String? get taxCode {
     return _box.get(_taxCodeKey);
+  }
+
+  static Future<void> saveToken(String token) async {
+    await _box.put('token', token);
+  }
+
+  static Future<void> clearToken(String token) async {
+    await _box.put('token', token);
+  }
+
+  static String? getToken() {
+    return _box.get(_token);
   }
 
   static Future<void> saveTaxCode(String taxCode) async {
