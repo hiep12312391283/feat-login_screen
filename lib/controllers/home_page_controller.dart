@@ -21,11 +21,19 @@ class HomeController extends GetxController {
 
     try {
       final token = await HiveService.getToken();
-      print('${token}');
+      if (token == null || token.isEmpty) {
+        print('Token is missing or empty');
+        return;
+      }
+      print('Token: $token');
+
       final response = await dio.get(
-          'https://training-api-unrp.onrender.com/products',
-          queryParameters: {'page': page.value, 'size': 10},
-          options: Options(headers: {'Authorization': 'Bearer $token'}));
+        'https://training-api-unrp.onrender.com/products',
+        queryParameters: {'page': page.value, 'size': 10},
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
 
       List<Product> fetchedProducts = (response.data['products'] as List)
           .map((data) => Product.fromJson(data))
@@ -44,6 +52,7 @@ class HomeController extends GetxController {
       isLoading.value = false;
     }
   }
+
 
   Future<void> refreshProducts() async {
     page.value = 1;

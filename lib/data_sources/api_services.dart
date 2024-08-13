@@ -5,14 +5,16 @@ import 'package:login_screen/models/user.dart';
 class ApiServices {
   final Dio dio = Dio(
     BaseOptions(
-      baseUrl: 'https://training-api-unrp.onrender.com',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    ),
+        baseUrl: 'https://training-api-unrp.onrender.com',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        validateStatus: (status) {
+          return status! < 500;
+        }),
   );
 
-  ApiServices() {
+  void setUpDio() {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
@@ -37,6 +39,18 @@ class ApiServices {
         },
       ),
     );
+  }
+
+  Future<List<dynamic>> fetchProducts(int page) async {
+    try {
+      final response = await dio.get('/products', queryParameters: {
+        'limit': 10,
+        'offset': page * 10,
+      });
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to load products');
+    }
   }
 
   Future<bool> requestApi(User user) async {
@@ -64,16 +78,15 @@ class ApiServices {
     }
   }
 
-  Future<Response> getProducts(int page, int size) async {
+  Future<Response> getProducts(int page) async {
     try {
       final response = await dio.get('/products', queryParameters: {
-        'page': page,
-        'size': size,
+        'limit': 10,
+        'offset': page * 10,
       });
-      return response;
+      return response.data;
     } catch (e) {
-      print(e);
-      rethrow;
+      throw Exception('Failed to load products');
     }
   }
 
