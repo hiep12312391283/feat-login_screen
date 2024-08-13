@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
-import 'package:login_screen/models/hive_service.dart';
-import 'package:login_screen/models/product.dart';
+import 'package:login_screen/base/hive_service.dart';
+import 'package:login_screen/base/product.dart';
 
 class HomeController extends GetxController {
   var products = <Product>[].obs;
@@ -25,34 +25,38 @@ class HomeController extends GetxController {
         print('Token is missing or empty');
         return;
       }
-      print('Token: $token');
 
       final response = await dio.get(
         'https://training-api-unrp.onrender.com/products',
         queryParameters: {'page': page.value, 'size': 10},
         options: Options(
-          headers: {'Authorization': 'Bearer $token'},
+          headers: {'Authorization': ' $token'},
         ),
       );
 
-      List<Product> fetchedProducts = (response.data['products'] as List)
-          .map((data) => Product.fromJson(data))
-          .toList();
+      if (response.data != null && response.data['products'] != null) {
+        print('${response.statusCode}');
+        List<Product> fetchedProducts = (response.data['products'] as List)
+            .map((data) => Product.fromJson(data))
+            .toList();
 
-      if (page.value == 1) {
-        products.assignAll(fetchedProducts);
+        if (page.value == 1) {
+          products.assignAll(fetchedProducts);
+        } else {
+          products.addAll(fetchedProducts);
+        }
+
+        page.value++;
       } else {
-        products.addAll(fetchedProducts);
+        print('${response.statusCode}');
+        print('No products found.');
       }
-
-      page.value++;
     } catch (e) {
       print("Error fetching products: $e");
     } finally {
       isLoading.value = false;
     }
   }
-
 
   Future<void> refreshProducts() async {
     page.value = 1;

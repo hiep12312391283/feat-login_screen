@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:login_screen/controllers/login_controller.dart';
-import 'package:login_screen/views/custom/custom_iconbutton.dart';
+import 'package:login_screen/features/app/ui/custom/custom_iconbutton.dart';
+import 'package:login_screen/features/login/controller/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});

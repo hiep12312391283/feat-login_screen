@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:login_screen/data_sources/api_services.dart';
-import 'package:login_screen/models/hive_service.dart';
-import 'package:login_screen/models/user.dart';
-import 'package:login_screen/views/custom/custom_dialog.dart';
+import 'package:login_screen/base/api_services.dart';
+import 'package:login_screen/base/hive_service.dart';
+import 'package:login_screen/features/app/ui/custom/custom_dialog.dart';
+import 'package:login_screen/features/login/models/login_request.dart';
+import 'package:login_screen/features/login/repository/login_repo.dart';
 
 class LoginController extends GetxController {
   final taxCodeController = TextEditingController(text: HiveService.taxCode);
@@ -33,25 +34,24 @@ class LoginController extends GetxController {
   void login() async {
     String taxCodeString = taxCodeController.text;
     int taxCode = int.parse(taxCodeString);
-    User user = User(
-        taxCodeAuth: taxCode,
-        accountAuth: accountController.text,
-        passwordAuth: passwordController.text);
+    LoginRequest loginRequest = LoginRequest(
+        taxCode: taxCode,
+        userName: accountController.text,
+        password: passwordController.text);
     validateMode.value = AutovalidateMode.always;
     if (formKey.currentState!.validate()) {
       isLoading.value = true;
       await Future.delayed(const Duration(seconds: 1));
       try {
-        bool loginSuccess = await apiServices.requestApi(user);
-        if (loginSuccess) {
+        final loginSuccess = await LoginRepo().login(loginRequest);
+        if (loginSuccess.success) {
           error.value = null;
           HiveService.setLoggedIn(true);
           HiveService.saveTaxCode(taxCodeController.text);
           HiveService.saveAccount(accountController.text);
           HiveService.savePassword(passwordController.text);
           Get.offAllNamed('/home');
-        }
-        else {
+        } else {
           throw Exception('thông tin đăng nhập không đúng');
         }
       } catch (e) {

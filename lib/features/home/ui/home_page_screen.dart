@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:login_screen/controllers/app_controller.dart';
-import 'package:login_screen/controllers/home_page_controller.dart';
+import 'package:login_screen/features/app/controller/app_controller.dart';
+import 'package:login_screen/features/home/controller/home_page_controller.dart';
 
 class HomePage extends GetView<AppController> {
   HomePage({super.key});

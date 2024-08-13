@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:login_screen/binding/global_binding.dart';
-import 'package:login_screen/binding/login_binding.dart';
-import 'package:login_screen/models/hive_service.dart';
-import 'package:login_screen/views/home_page_screen.dart';
-import 'package:login_screen/views/login_screen.dart';
-
-import 'package:login_screen/views/splash_screen.dart';
+import 'package:login_screen/base/hive_service.dart';
+import 'package:login_screen/features/app/binding/global_binding.dart';
+import 'package:login_screen/features/app/ui/splash_screen.dart';
+import 'package:login_screen/features/home/ui/home_page_screen.dart';
+import 'package:login_screen/features/login/binding/login_binding.dart';
+import 'package:login_screen/features/login/ui/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,9 +36,6 @@ class MyApp extends StatelessWidget {
                 name: '/home',
                 page: () => HomePage(),
                 binding: GlobalBinding()),
-            // GetPage(
-            //     name: '/productDetail',
-            //     page: () => const ProductDetailScreen())
           ]),
     );
   }
