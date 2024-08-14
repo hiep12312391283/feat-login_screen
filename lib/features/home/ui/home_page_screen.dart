@@ -37,7 +37,6 @@ class HomePage extends GetView<AppController> {
           ),
           IconButton(
             onPressed: () {
-              // Navigate to the product detail page or other action
               print('Thêm sản phẩm');
             },
             icon: const Icon(Icons.add),
@@ -75,7 +74,7 @@ class HomePage extends GetView<AppController> {
         onPressed: () {
           homeController.fetchProducts();
         },
-        child: Icon(Icons.refresh),
+        child: const Icon(Icons.refresh),
       ),
     );
   }

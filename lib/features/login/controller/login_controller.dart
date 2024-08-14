@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:login_screen/base/api_services.dart';
 import 'package:login_screen/base/hive_service.dart';
 import 'package:login_screen/features/app/ui/custom/custom_dialog.dart';
 import 'package:login_screen/features/login/models/login_request.dart';
@@ -17,7 +16,7 @@ class LoginController extends GetxController {
   final RxBool isLoading = false.obs;
   final RxString taxCode = ''.obs;
   final RxString password = ''.obs;
-  final ApiServices apiServices = ApiServices();
+  final LoginRepo loginRepo = Get.find();
 
   void toggleEyeIcon() {
     isObscure.value = !isObscure.value;
@@ -34,6 +33,7 @@ class LoginController extends GetxController {
   void login() async {
     String taxCodeString = taxCodeController.text;
     int taxCode = int.parse(taxCodeString);
+
     LoginRequest loginRequest = LoginRequest(
         taxCode: taxCode,
         userName: accountController.text,
@@ -43,16 +43,19 @@ class LoginController extends GetxController {
       isLoading.value = true;
       await Future.delayed(const Duration(seconds: 1));
       try {
-        final loginSuccess = await LoginRepo().login(loginRequest);
-        if (loginSuccess.success) {
+        final loginResponse = await loginRepo.login(loginRequest);
+        if (loginResponse.success) {
           error.value = null;
           HiveService.setLoggedIn(true);
+          if (loginResponse.token != null) {
+            HiveService.saveToken(loginResponse.token!);
+          }
           HiveService.saveTaxCode(taxCodeController.text);
           HiveService.saveAccount(accountController.text);
           HiveService.savePassword(passwordController.text);
           Get.offAllNamed('/home');
         } else {
-          throw Exception('thông tin đăng nhập không đúng');
+          throw Exception('Error: 401');
         }
       } catch (e) {
         Get.dialog(CustomDialog(
