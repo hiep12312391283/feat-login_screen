@@ -55,11 +55,13 @@ class LoginController extends GetxController {
           HiveService.savePassword(passwordController.text);
           Get.offAllNamed('/home');
         } else {
-          throw Exception('Error: 401');
+          error.value = 'Thông tin đăng nhập không chính xác';
+          Get.dialog(CustomDialog(message: error.value ?? "Đã xảy ra lỗi"));
+
         }
       } catch (e) {
         Get.dialog(CustomDialog(
-            message: error.value ?? 'Thông tin đăng nhập không chính xác'));
+          message: error.value ?? 'Đã xảy ra lỗi trong quá trình đăng nhập'));
         error.value = e.toString();
       } finally {
         isLoading.value = false;
