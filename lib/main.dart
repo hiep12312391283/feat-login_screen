@@ -4,7 +4,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:login_screen/base/hive_service.dart';
 import 'package:login_screen/features/app/binding/global_binding.dart';
 import 'package:login_screen/features/app/ui/splash_screen.dart';
-import 'package:login_screen/features/home/ui/home_page_screen.dart';
+import 'package:login_screen/features/home/binding/home_binding.dart';
+import 'package:login_screen/features/home/ui/home_view.dart';
 import 'package:login_screen/features/login/binding/login_binding.dart';
 import 'package:login_screen/features/login/ui/login_screen.dart';
 
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
             GetPage(
                 name: '/home',
                 page: () => HomePage(),
-                binding: GlobalBinding()),
+                binding: HomeBinding()),
           ]),
     );
   }

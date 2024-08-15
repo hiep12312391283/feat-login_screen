@@ -6,6 +6,6 @@ class GlobalBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<AppController>(() => AppController(), fenix: true);
-    Get.lazyPut<ApiServices>(() => ApiServices(),fenix: true);
+    Get.lazyPut<ApiServices>(() => ApiServices(), fenix: true);
   }
 }

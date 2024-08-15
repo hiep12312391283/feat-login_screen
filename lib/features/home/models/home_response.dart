@@ -1,7 +1,7 @@
 class HomeResponse {
   final bool success;
   final String message;
-  final List<Data> data;
+  final List<Product> data;
 
   HomeResponse({
     required this.success,
@@ -12,7 +12,7 @@ class HomeResponse {
   factory HomeResponse.fromJson(Map<String, dynamic> json) => HomeResponse(
         success: json["success"],
         message: json["message"],
-        data: List<Data>.from(json["data"].map((x) => Data.fromJson(x))),
+        data: List<Product>.from(json["data"].map((x) => Product.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -22,14 +22,14 @@ class HomeResponse {
       };
 }
 
-class Data {
+class Product {
   final int id;
   final String name;
   final int price;
   final int quantity;
   final String cover;
 
-  Data({
+  Product({
     required this.id,
     required this.name,
     required this.price,
@@ -37,7 +37,7 @@ class Data {
     required this.cover,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],
         name: json["name"],
         price: json["price"],

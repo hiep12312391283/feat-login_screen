@@ -5,7 +5,6 @@ import 'package:login_screen/features/home/controller/home_page_controller.dart'
 
 class HomePage extends GetView<AppController> {
   HomePage({super.key});
-
   final HomeController homeController = Get.put(HomeController());
 
   void _logout() {
@@ -50,32 +49,37 @@ class HomePage extends GetView<AppController> {
         ],
       ),
       body: Obx(() {
-        if (homeController.isLoading.value) {
+        if (homeController.isLoading.value &&
+            homeController.productList.isEmpty) {
           return const Center(child: CircularProgressIndicator());
-        } else if (homeController.products.isEmpty) {
+        } else if (homeController.productList.isEmpty) {
           return const Center(child: Text('Không có sản phẩm'));
         } else {
-          return ListView.builder(
-            itemCount: homeController.products.length,
-            itemBuilder: (context, index) {
-              final product = homeController.products[index];
-              // return ListTile(
-              //   title: Text(product.name),
-              //   subtitle: Text('\$${product.price}'),
-              //   onTap: () {
-              //     print('Tapped on ${product.name}');
-              //   },
-              // );
-            },
+          return RefreshIndicator(
+            onRefresh: homeController.refresh,
+            child: ListView.builder(
+              controller: homeController.scrollController,
+              itemCount: homeController.productList.length +
+                  (homeController.canLoadMore.value ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index < homeController.productList.length) {
+                  final product = homeController.productList[index];
+                  return ListTile(
+                    title: Text(product.name),
+                    subtitle: Text('\$${product.price}'),
+                    leading: Image.network(product.cover),
+                  );
+                } else if (homeController.canLoadMore.value) {
+                  // homeController.loadMore();
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
           );
         }
       }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          homeController.fetchProducts();
-        },
-        child: const Icon(Icons.refresh),
-      ),
     );
   }
 }

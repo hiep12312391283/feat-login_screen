@@ -1,65 +1,69 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:dio/dio.dart';
-import 'package:login_screen/base/hive_service.dart';
+
 import 'package:login_screen/features/home/models/home_response.dart';
+import 'package:login_screen/features/home/repository/home_repo.dart';
 
 class HomeController extends GetxController {
-  var products = <HomeResponse>[].obs;
-  var isLoading = false.obs;
-  var page = 1.obs;
-  final Dio dio = Dio();
+  final HomeRepo homeRepo = Get.find();
+  RxBool isLoading = false.obs;
+  final productList = <Product>[].obs;
+  final currentPage = 1.obs;
+  final canLoadMore = true.obs;
+  final ScrollController scrollController = ScrollController();
 
   @override
   void onInit() {
     fetchProducts();
     super.onInit();
+    scrollController.addListener(_scrollListener);
   }
 
-  Future<void> fetchProducts() async {
-    if (isLoading.value) return;
-    isLoading.value = true;
-
-    try {
-      final token = await HiveService.getToken();
-      if (token == null || token.isEmpty) {
-        print('Token is missing or empty');
-        return;
+  void _scrollListener() {
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
+      if (canLoadMore.value) {
+        loadMore();
       }
-
-      final response = await dio.get(
-        'https://training-api-unrp.onrender.com/products',
-        queryParameters: {'page': page.value, 'size': 10},
-        options: Options(
-          headers: {'Authorization': ' $token'},
-        ),
-      );
-
-      if (response.data != null && response.data['products'] != null) {
-        print('${response.statusCode}');
-        List<HomeResponse> fetchedProducts = (response.data['products'] as List)
-            .map((data) => HomeResponse.fromJson(data))
-            .toList();
-
-        if (page.value == 1) {
-          products.assignAll(fetchedProducts);
-        } else {
-          products.addAll(fetchedProducts);
-        }
-
-        page.value++;
-      } else {
-        print('${response.statusCode}');
-        print('No products found.');
-      }
-    } catch (e) {
-      print("Error fetching products: $e");
-    } finally {
-      isLoading.value = false;
     }
   }
 
-  Future<void> refreshProducts() async {
-    page.value = 1;
-    await fetchProducts();
+  Future<void> fetchProducts() async {
+    if (!canLoadMore.value || isLoading.value) return;
+    try {
+      isLoading(true);
+      final response =
+          await homeRepo.getHomeData(page: currentPage.value, limit: 10);
+      if (response.success) {
+        var newProducts = response.data;
+
+        if (newProducts.isEmpty) {
+          canLoadMore(false);
+        } else {
+          productList.addAll(newProducts);
+          currentPage.value++;
+        }
+      } else {
+        canLoadMore(false);
+      }
+    } catch (e) {
+      canLoadMore(false);
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> loadMore() async {
+
+    if (!canLoadMore.value || isLoading.value) return;
+    fetchProducts();
+  }
+
+  @override
+  Future<void> refresh() async {
+    currentPage.value = 1;
+    productList.clear();
+    canLoadMore(true);
+    fetchProducts();
   }
 }
