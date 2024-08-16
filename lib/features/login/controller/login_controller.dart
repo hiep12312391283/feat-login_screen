@@ -45,7 +45,6 @@ class LoginController extends GetxController {
       try {
         final loginResponse = await loginRepo.login(loginRequest);
         if (loginResponse.success) {
-          error.value = null;
           HiveService.setLoggedIn(true);
           if (loginResponse.token != null) {
             HiveService.saveToken(loginResponse.token!);
@@ -55,13 +54,9 @@ class LoginController extends GetxController {
           HiveService.savePassword(passwordController.text);
           Get.offAllNamed('/home');
         } else {
-          error.value = 'Thông tin đăng nhập không chính xác';
-          Get.dialog(CustomDialog(message: error.value ?? "Đã xảy ra lỗi"));
-
+          Get.dialog(CustomDialog(message: error.value ?? "Thông tin đăng nhập không chính xác"));
         }
       } catch (e) {
-        Get.dialog(CustomDialog(
-          message: error.value ?? 'Đã xảy ra lỗi trong quá trình đăng nhập'));
         error.value = e.toString();
       } finally {
         isLoading.value = false;

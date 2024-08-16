@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:login_screen/features/app/controller/app_controller.dart';
-import 'package:login_screen/features/home/controller/home_page_controller.dart';
+import 'package:login_screen/features/home/controller/home_controller.dart';
 
-class HomePage extends GetView<AppController> {
-  HomePage({super.key});
-  final HomeController homeController = Get.put(HomeController());
-
-  void _logout() {
-    controller.logout();
-    Get.offAllNamed('/login');
-  }
+class HomePage extends GetView<HomeController> {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +16,10 @@ class HomePage extends GetView<AppController> {
             'Danh sách',
             style: TextStyle(
               fontSize: 20,
-              fontWeight: FontWeight.bold,
             ),
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              _logout();
-            },
-            icon: const Icon(Icons.exit_to_app_sharp),
-          ),
           IconButton(
             onPressed: () {
               print('Thêm sản phẩm');
@@ -43,43 +29,58 @@ class HomePage extends GetView<AppController> {
           IconButton(
             icon: const Icon(Icons.shopping_cart),
             onPressed: () {
-              print('Giỏ hàng');
+              controller.navigateToCart();
             },
           ),
         ],
       ),
       body: Obx(() {
-        if (homeController.isLoading.value &&
-            homeController.productList.isEmpty) {
+        if (controller.isLoading.value && controller.productList.isEmpty) {
           return const Center(child: CircularProgressIndicator());
-        } else if (homeController.productList.isEmpty) {
+        } else if (controller.productList.isEmpty) {
           return const Center(child: Text('Không có sản phẩm'));
         } else {
           return RefreshIndicator(
-            onRefresh: homeController.refresh,
+            onRefresh: controller.onRefresh,
             child: ListView.builder(
-              controller: homeController.scrollController,
-              itemCount: homeController.productList.length +
-                  (homeController.canLoadMore.value ? 1 : 0),
+              controller: controller.scrollController,
+              itemCount: controller.productList.length + 1,
               itemBuilder: (context, index) {
-                if (index < homeController.productList.length) {
-                  final product = homeController.productList[index];
+                if (index < controller.productList.length) {
+                  final product = controller.productList[index];
                   return ListTile(
                     title: Text(product.name),
                     subtitle: Text('\$${product.price}'),
                     leading: Image.network(product.cover),
+                    onTap: () {
+                      Get.toNamed('/detail', arguments: product);
+                    },
+                    trailing: IconButton(
+                      icon: const Icon(Icons.add_shopping_cart_rounded),
+                      onPressed: () {
+                        // controller.addToCart(product);
+                        Get.snackbar(
+                          'Thành công',
+                          '${product.name} đã được thêm vào giỏ hàng!',
+                          snackPosition: SnackPosition.BOTTOM,
+                        );
+                      },
+                    ),
                   );
-                } else if (homeController.canLoadMore.value) {
-                  // homeController.loadMore();
-                  return const Center(child: CircularProgressIndicator());
                 } else {
-                  return const SizedBox.shrink();
+                  return const Center(child: CircularProgressIndicator());
                 }
               },
             ),
           );
         }
       }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          controller.logout();
+        },
+        child: const Icon(Icons.exit_to_app),
+      ),
     );
   }
 }

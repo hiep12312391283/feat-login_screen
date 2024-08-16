@@ -6,5 +6,6 @@ class AppController extends GetxController {
 
   void logout() {
     HiveService.setLoggedIn(false);
+    Get.offAllNamed('/login');
   }
 }

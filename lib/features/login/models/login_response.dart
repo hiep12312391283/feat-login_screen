@@ -1,4 +1,3 @@
-//viết 2 class là success và response
 class LoginResponse {
   final bool success;
   final String message;

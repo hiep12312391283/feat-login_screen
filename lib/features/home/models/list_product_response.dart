@@ -1,15 +1,15 @@
-class HomeResponse {
+class ListProductResponse {
   final bool success;
   final String message;
   final List<Product> data;
 
-  HomeResponse({
+  ListProductResponse({
     required this.success,
     required this.message,
     required this.data,
   });
 
-  factory HomeResponse.fromJson(Map<String, dynamic> json) => HomeResponse(
+  factory ListProductResponse.fromJson(Map<String, dynamic> json) => ListProductResponse(
         success: json["success"],
         message: json["message"],
         data: List<Product>.from(json["data"].map((x) => Product.fromJson(x))),
