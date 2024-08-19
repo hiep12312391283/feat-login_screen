@@ -56,6 +56,7 @@ class HomeController extends GetxController {
         if (isLoadMore) {
           productList.addAll(response.data);
           currentPage = tempPage;
+          
         } else {
           productList.assignAll(response.data);
           currentPage = 1;
@@ -79,7 +80,6 @@ class HomeController extends GetxController {
 
   Future<void> onRefresh() async {
     currentPage = 1;
-    productList.clear();
     await fetchProducts();
   }
 }
