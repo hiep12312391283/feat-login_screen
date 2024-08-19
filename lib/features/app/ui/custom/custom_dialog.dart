@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomDialog extends StatelessWidget {
-  const CustomDialog({super.key});
+  const CustomDialog({super.key, required this.message});
+  final String message;
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class CustomDialog extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Thông tin đăng nhập không hợp lệ'),
+            Text(message),
             const SizedBox(height: 20),
             ElevatedButton(
                 onPressed: () {
