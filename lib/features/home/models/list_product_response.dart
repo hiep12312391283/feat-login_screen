@@ -11,9 +11,11 @@ class ListProductResponse {
 
   factory ListProductResponse.fromJson(Map<String, dynamic> json) =>
       ListProductResponse(
-        success: json["success"],
-        message: json["message"],
-        data: List<Product>.from(json["data"].map((x) => Product.fromJson(x))),
+        success: json["success"] ?? false,
+        message: json["message"] ?? "",
+        data: json["data"] != null
+            ? List<Product>.from(json["data"].map((x) => Product.fromJson(x)))
+            : [],
       );
 
   Map<String, dynamic> toJson() => {
@@ -39,11 +41,11 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-        id: json["id"],
-        name: json["name"],
-        price: json["price"],
-        quantity: json["quantity"],
-        cover: json["cover"],
+        id: json["id"] ?? 0,
+        name: json["name"] ?? '',
+        price: json["price"] ?? 0, 
+        quantity: json["quantity"] ?? 0,
+        cover: json["cover"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {

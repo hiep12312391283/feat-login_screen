@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigatorNextScreen() async {
-    print('${_appController.isLoggedIn}');
+    // print('${_appController.isLoggedIn}');
     Future.delayed(const Duration(seconds: 2), () {
       Get.offAllNamed(_appController.isLoggedIn ? '/home' : '/login');
     });

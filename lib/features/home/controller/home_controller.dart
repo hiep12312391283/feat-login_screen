@@ -24,7 +24,7 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
-    scrollController.dispose();
+    scrollController.removeListener(_scrollListener);
     super.onClose();
   }
 
@@ -40,13 +40,13 @@ class HomeController extends GetxController {
   }
 
   void navigateToCart() {
-    Get.offAllNamed('/cart');
+    Get.toNamed('/cart');
   }
 
   Future<void> fetchProducts({bool isLoadMore = false}) async {
     if (isLoading.value) return;
     try {
-      isLoading(true);
+      isLoading.value = true;
       int tempPage = isLoadMore ? currentPage + 1 : 1;
       final response = await homeRepo.getListProduct(
         ListProductRequest(page: tempPage, limit: 10),
@@ -56,7 +56,6 @@ class HomeController extends GetxController {
         if (isLoadMore) {
           productList.addAll(response.data);
           currentPage = tempPage;
-          
         } else {
           productList.assignAll(response.data);
           currentPage = 1;
@@ -70,7 +69,7 @@ class HomeController extends GetxController {
     } catch (e) {
       Get.dialog(CustomDialog(message: "Đã xảy ra lỗi: ${e.toString()}"));
     } finally {
-      isLoading(false);
+      isLoading.value = false;
     }
   }
 
