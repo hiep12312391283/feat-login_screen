@@ -78,7 +78,6 @@ class HomeController extends GetxController {
   }
 
   Future<void> onRefresh() async {
-    currentPage = 1;
     await fetchProducts();
   }
 }
