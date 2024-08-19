@@ -52,9 +52,9 @@ class HomePage extends GetView<HomeController> {
                     title: Text(product.name),
                     subtitle: Text('\$${product.price}'),
                     leading: Image.network(product.cover),
-                    // onTap: () {
-                    //   Get.toNamed('/detail', arguments: product.id);
-                    // },
+                    onTap: () {
+                      Get.toNamed('/detail');
+                    },
                     trailing: IconButton(
                       icon: const Icon(Icons.add_shopping_cart_rounded),
                       onPressed: () {
