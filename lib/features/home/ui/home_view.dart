@@ -22,7 +22,7 @@ class HomePage extends GetView<HomeController> {
         actions: [
           IconButton(
             onPressed: () {
-              print('Thêm sản phẩm');
+              Get.offAllNamed('/create_product');
             },
             icon: const Icon(Icons.add),
           ),
@@ -53,12 +53,12 @@ class HomePage extends GetView<HomeController> {
                     subtitle: Text('\$${product.price}'),
                     leading: Image.network(product.cover),
                     onTap: () {
-                      Get.toNamed('/detail', arguments: product);
+                      int productId = product.id;
+                      Get.toNamed('/detail', arguments: product.id);
                     },
                     trailing: IconButton(
                       icon: const Icon(Icons.add_shopping_cart_rounded),
                       onPressed: () {
-                        // controller.addToCart(product);
                         Get.snackbar(
                           'Thành công',
                           '${product.name} đã được thêm vào giỏ hàng!',

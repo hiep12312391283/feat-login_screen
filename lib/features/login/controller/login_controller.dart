@@ -11,7 +11,6 @@ class LoginController extends GetxController {
   final passwordController = TextEditingController(text: HiveService.password);
   final formKey = GlobalKey<FormState>();
   final validateMode = AutovalidateMode.disabled.obs;
-  final error = Rxn<String>();
   final RxBool isObscure = true.obs;
   final RxBool isLoading = false.obs;
   final RxString taxCode = ''.obs;
@@ -54,10 +53,11 @@ class LoginController extends GetxController {
           HiveService.savePassword(passwordController.text);
           Get.offAllNamed('/home');
         } else {
-          Get.dialog(CustomDialog(message: error.value ?? "Thông tin đăng nhập không chính xác"));
+          Get.dialog(const CustomDialog(
+              message: "Thông tin đăng nhập không chính xác"));
         }
       } catch (e) {
-        error.value = e.toString();
+        Get.dialog(CustomDialog(message: "Đã xảy ra lỗi: ${e.toString()}"));
       } finally {
         isLoading.value = false;
       }

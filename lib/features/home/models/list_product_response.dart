@@ -9,7 +9,8 @@ class ListProductResponse {
     required this.data,
   });
 
-  factory ListProductResponse.fromJson(Map<String, dynamic> json) => ListProductResponse(
+  factory ListProductResponse.fromJson(Map<String, dynamic> json) =>
+      ListProductResponse(
         success: json["success"],
         message: json["message"],
         data: List<Product>.from(json["data"].map((x) => Product.fromJson(x))),

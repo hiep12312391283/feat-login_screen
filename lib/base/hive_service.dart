@@ -3,7 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 class HiveService {
   static late final Box _box;
   static const tokenKey = 'authToken';
-
+  static final Box cartBox = Hive.box('cartBox');
   static Future<void> init() async {
     _box = await Hive.openBox('userBox');
   }

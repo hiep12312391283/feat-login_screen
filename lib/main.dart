@@ -6,6 +6,8 @@ import 'package:login_screen/features/app/binding/global_binding.dart';
 import 'package:login_screen/features/app/ui/splash_screen.dart';
 import 'package:login_screen/features/cart/binding/cart_binding.dart';
 import 'package:login_screen/features/cart/ui/cart_view.dart';
+import 'package:login_screen/features/create_product/binding/create_product_binding.dart';
+import 'package:login_screen/features/create_product/ui/create_page.dart';
 import 'package:login_screen/features/detail_product/binding/product_detail_binding.dart';
 import 'package:login_screen/features/detail_product/ui/product_detail.dart';
 import 'package:login_screen/features/home/binding/home_binding.dart';
@@ -39,7 +41,7 @@ class MyApp extends StatelessWidget {
                 binding: LoginBinding()),
             GetPage(
                 name: '/home',
-                page: () =>  const HomePage(),
+                page: () => const HomePage(),
                 binding: HomeBinding()),
             GetPage(
                 name: '/cart',
@@ -48,7 +50,11 @@ class MyApp extends StatelessWidget {
             GetPage(
                 name: '/detail',
                 page: () => const ProductDetail(),
-                binding: ProductDetailBinding())
+                binding: ProductDetailBinding()),
+            GetPage(
+                name: '/create_product',
+                page: () => const CreateProductScreen(),
+                binding: CreateProductBinding())
           ]),
     );
   }

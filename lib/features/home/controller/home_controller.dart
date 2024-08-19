@@ -1,35 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:login_screen/features/app/controller/app_controller.dart';
 import 'package:login_screen/features/app/ui/custom/custom_dialog.dart';
 import 'package:login_screen/features/home/models/list_product_request.dart';
 import 'package:login_screen/features/home/models/list_product_response.dart';
 import 'package:login_screen/features/home/repository/list_product_repo.dart';
+import 'package:dio/dio.dart';
 
 class HomeController extends GetxController {
   final ListProductRepo homeRepo = Get.find();
   final isLoading = false.obs;
   final productList = <Product>[].obs;
-  final currentPage = 1.obs;
+  int currentPage = 1;
   final ScrollController scrollController = ScrollController();
   final appController = Get.find<AppController>();
 
   @override
   void onInit() {
-    fetchProducts();
     super.onInit();
+    fetchProducts();
     scrollController.addListener(_scrollListener);
   }
 
-  void remove() {
+  @override
+  void onClose() {
     scrollController.dispose();
+    super.onClose();
   }
 
   void _scrollListener() {
     if (scrollController.position.pixels >=
-            scrollController.position.maxScrollExtent - 400 &&
-        !isLoading.value) {
+        scrollController.position.maxScrollExtent - 400) {
       loadMore();
     }
   }
@@ -42,34 +43,43 @@ class HomeController extends GetxController {
     Get.offAllNamed('/cart');
   }
 
-  Future<void> fetchProducts() async {
+  Future<void> fetchProducts({bool isLoadMore = false}) async {
     if (isLoading.value) return;
-
     try {
       isLoading(true);
+      int tempPage = isLoadMore ? currentPage + 1 : 1;
       final response = await homeRepo.getListProduct(
-          ListProductRequest(page: currentPage.value, limit: 10));
+        ListProductRequest(page: tempPage, limit: 10),
+      );
+
       if (response.success && response.data.isNotEmpty) {
-        productList.addAll(response.data);
-        currentPage.value++;
+        if (isLoadMore) {
+          productList.addAll(response.data);
+          currentPage = tempPage;
+        } else {
+          productList.assignAll(response.data);
+          currentPage = 1;
+        }
       }
+    } on DioException catch (e) {
+      Get.dialog(CustomDialog(
+        message:
+            "Lỗi: ${e.response?.statusCode} - ${e.response?.statusMessage}",
+      ));
     } catch (e) {
-      Get.dialog(const CustomDialog(message: 'Đã xảy ra lỗi'));
-      e.toString();
+      Get.dialog(CustomDialog(message: "Đã xảy ra lỗi: ${e.toString()}"));
     } finally {
       isLoading(false);
     }
   }
 
   Future<void> loadMore() async {
-    if (!isLoading.value) {
-      fetchProducts();
-    }
+    await fetchProducts(isLoadMore: true);
   }
 
   Future<void> onRefresh() async {
-    currentPage.value = 1;
+    currentPage = 1;
     productList.clear();
-    fetchProducts();
+    await fetchProducts();
   }
 }
