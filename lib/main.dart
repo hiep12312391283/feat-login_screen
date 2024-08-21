@@ -39,9 +39,10 @@ class MyApp extends StatelessWidget {
                 name: '/home',
                 page: () => const HomePage(),
                 binding: HomeBinding()),
-            GetPage(name: '/detail', page:() => const DetailProductView(),
-            binding: DetailProductBinding()
-            )
+            GetPage(
+                name: '/detail',
+                page: () => const DetailProductView(),
+                binding: DetailProductBinding())
           ]),
     );
   }
