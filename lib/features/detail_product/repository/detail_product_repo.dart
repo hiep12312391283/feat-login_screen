@@ -8,13 +8,13 @@ class DetailProductRepo {
   Future<DetailProductResponse> fetchDetailProduct(
       DetailProductRequest request) async {
     final response = await apiServices.dio.get('/products/${request.id}');
+    print('${response.statusCode}');
     return DetailProductResponse.fromJson(response.data);
   }
 
   Future<DetailProductResponse> deleteProduct(
       DetailProductRequest request) async {
     final response = await apiServices.dio.delete('/products/${request.id}');
-    print('${response.statusCode}');
     return DetailProductResponse.fromJson(response.data);
   }
 }

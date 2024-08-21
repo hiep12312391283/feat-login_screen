@@ -4,7 +4,6 @@ import 'package:login_screen/features/detail_product/controller/detail_product_c
 
 class DetailProductView extends GetView<DetailProductController> {
   const DetailProductView({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +13,7 @@ class DetailProductView extends GetView<DetailProductController> {
           onPressed: () {
             controller.deleteProduct(controller.productId);
           },
-          child: const Text("Xóa  "),
+          child: const Text("Xóa"),
         ),
       ),
     );

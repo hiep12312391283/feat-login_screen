@@ -3,8 +3,8 @@ import 'package:login_screen/features/detail_product/models/detail_product_reque
 import 'package:login_screen/features/detail_product/repository/detail_product_repo.dart';
 
 class DetailProductController extends GetxController {
-  final DetailProductRepo detailProductRepo = DetailProductRepo();
-  final int productId = Get.arguments as int;
+  final DetailProductRepo detailProductRepo = Get.find();
+  final productId = Get.arguments as int;
 
   Future<void> deleteProduct(int productId) async {
     final request = DetailProductRequest(id: productId);
@@ -18,6 +18,7 @@ class DetailProductController extends GetxController {
       }
     } catch (e) {
       Get.snackbar("Lỗi", "Không tìm thấy sản phẩm");
-    } finally {}
+      print("Error deleting product: $e");
+    }
   }
 }
