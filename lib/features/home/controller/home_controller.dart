@@ -27,6 +27,7 @@ class HomeController extends GetxController {
     scrollController.removeListener(_scrollListener);
     super.onClose();
   }
+  
 
   void _scrollListener() {
     if (scrollController.position.pixels >=
