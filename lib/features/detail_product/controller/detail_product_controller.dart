@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:login_screen/features/app/ui/custom/custom_dialog.dart';
 import 'package:login_screen/features/detail_product/repository/detail_product_repo.dart';
 import 'package:login_screen/features/home/models/list_product_response.dart';
 
@@ -34,7 +35,7 @@ class DetailProductController extends GetxController {
         Get.snackbar("Lỗi", response.message);
       }
     } catch (e) {
-      throw Exception();
+      Get.dialog(CustomDialog(message: "Đã xảy ra lỗi: ${e.toString()}"));
     } finally {
       isLoading.value = false;
     }

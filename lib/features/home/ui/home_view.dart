@@ -57,7 +57,7 @@ class HomePage extends GetView<HomeController> {
                     onTap: () {
                       Get.toNamed('/detail', arguments: product.id)!.then((result) {
                         if (result == 'updated') {
-                          controller.fetchProducts(); 
+                          controller.onRefresh(); 
                         }
                       });
                     },
