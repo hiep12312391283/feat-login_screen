@@ -79,7 +79,6 @@ class DetailProductController extends GetxController {
       if (formKey.currentState!.validate()) {
         if (response.success) {
           Get.back(result: 'updated');
-          product.value = updatedProduct;
           Get.snackbar("Thành công", "Sản phẩm đã được cập nhật");
         } else {
           Get.snackbar("Lỗi", response.message);
