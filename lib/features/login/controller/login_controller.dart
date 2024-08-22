@@ -31,7 +31,7 @@ class LoginController extends GetxController {
 
   void login() async {
     LoginRequest loginRequest = LoginRequest(
-        taxCode: int.parse(taxCodeController.text),
+        taxCode: int.tryParse(taxCodeController.text) ?? 0,
         userName: accountController.text,
         password: passwordController.text);
     validateMode.value = AutovalidateMode.always;

@@ -6,18 +6,34 @@ import 'package:login_screen/features/home/models/list_product_response.dart';
 
 class DetailProductController extends GetxController {
   final DetailProductRepo detailProductRepo = Get.find();
-  final productId = Get.arguments as int;
   final isLoading = false.obs;
   var product = Rxn<Product>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController coverController = TextEditingController();
+  late final int productId;
+  final formKey = GlobalKey<FormState>();
+  final validateMode = AutovalidateMode.always.obs;
 
   @override
   void onInit() {
     super.onInit();
-    fetchProducts(productId);
+    productId = Get.arguments as int;
+  }
+
+  @override
+  void onReady() async {
+    await fetchProducts(productId);
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    nameController.dispose();
+    priceController.dispose();
+    quantityController.dispose();
+    coverController.dispose();
   }
 
   Future<void> deleteProduct(int productId) async {
@@ -55,17 +71,19 @@ class DetailProductController extends GetxController {
       final updatedProduct = Product(
         id: productId,
         name: nameController.text,
-        price: int.parse(priceController.text),
-        quantity: int.parse(quantityController.text),
+        price: int.tryParse(priceController.text) ?? 0,
+        quantity: int.tryParse(quantityController.text) ?? 0,
         cover: coverController.text,
       );
       final response = await detailProductRepo.updateProducts(updatedProduct);
-      if (response.success) {
-        Get.back(result: 'updated');
-        product.value = updatedProduct;
-        Get.snackbar("Thành công", "Sản phẩm đã được cập nhật");
-      } else {
-        Get.snackbar("Lỗi", response.message);
+      if (formKey.currentState!.validate()) {
+        if (response.success) {
+          Get.back(result: 'updated');
+          product.value = updatedProduct;
+          Get.snackbar("Thành công", "Sản phẩm đã được cập nhật");
+        } else {
+          Get.snackbar("Lỗi", response.message);
+        }
       }
     } catch (e) {
       Get.dialog(CustomDialog(message: "Đã xảy ra lỗi: ${e.toString()}"));
