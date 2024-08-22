@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:login_screen/features/detail_product/controller/detail_product_controller.dart';
 
@@ -33,46 +34,70 @@ class DetailProductView extends GetView<DetailProductController> {
               child: Text('Không có sản phẩm để hiển thị'),
             );
           }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              product.cover.isNotEmpty
-                  ? SizedBox(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      child: Image.network(
-                        product.cover,
-                        fit: BoxFit.contain,
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                product.cover.isNotEmpty
+                    ? SizedBox(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        child: Image.network(
+                          product.cover,
+                          fit: BoxFit.contain,
+                        ),
+                      )
+                    : SizedBox(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        child: const Center(child: Text("Không có hình ảnh")),
                       ),
-                    )
-                  : SizedBox(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      child: const Center(child: Text("Không có hình ảnh")),
+                const SizedBox(height: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      controller: controller.coverController,
+                      decoration:
+                          const InputDecoration(labelText: 'URL hình ảnh'),
                     ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'ID sản phẩm: ${product.id}',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 16),
-                      Text('Tên sản phẩm: ${product.name}'),
-                      const SizedBox(height: 16),
-                      Text('Giá: ${product.price.toString()} VND'),
-                      const SizedBox(height: 16),
-                      Text('Số lượng: ${product.quantity.toString()}'),
-                      const SizedBox(height: 16),
-                    ],
-                  ),
+                    TextFormField(
+                      controller: controller.nameController,
+                      decoration:
+                          const InputDecoration(labelText: 'Tên sản phẩm'),
+                    ),
+                    TextFormField(
+                      controller: controller.quantityController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: const InputDecoration(labelText: 'Số lượng'),
+                    ),
+                    TextFormField(
+                      controller: controller.priceController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      decoration: const InputDecoration(labelText: 'Giá tiền'),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Center(
+                      child: ElevatedButton(
+                          onPressed: () {
+                            controller.updateProduct();
+                          },
+                          child: const Text('Cập nhật')),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         }));
   }
