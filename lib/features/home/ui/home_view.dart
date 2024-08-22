@@ -8,7 +8,9 @@ class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         flexibleSpace: Container(
           alignment: Alignment.bottomLeft,
           padding: const EdgeInsets.only(bottom: 10, left: 20),
@@ -53,7 +55,11 @@ class HomePage extends GetView<HomeController> {
                     subtitle: Text('\$${product.price}'),
                     leading: Image.network(product.cover),
                     onTap: () {
-                      Get.toNamed('/detail', arguments: product.id);
+                      Get.toNamed('/detail', arguments: product.id)!.then((result) {
+                        if (result == 'updated') {
+                          controller.fetchProducts(); 
+                        }
+                      });
                     },
                     trailing: IconButton(
                       icon: const Icon(Icons.add_shopping_cart_rounded),

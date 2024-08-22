@@ -13,6 +13,4 @@ class ApiServices {
           return status != null && status < 500;
         }),
   );
-
-  get(String s) {}
 }
