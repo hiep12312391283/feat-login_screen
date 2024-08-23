@@ -39,16 +39,16 @@ class DetailProductController extends GetxController {
   }
 
   Future<void> fetchProducts(int productId) async {
-    validateMode.value = AutovalidateMode.always;
     try {
       isLoading.value = true;
+      await Future.delayed(const Duration(microseconds: 30));
       final response = await detailProductRepo.fetchDetailProduct(productId);
       if (response.success) {
         product.value = response.product;
         nameController.text = response.product.name;
         priceController.text = response.product.price.toString();
         quantityController.text = response.product.quantity.toString();
-        coverController.text = response.product.cover;
+        coverController.text = response.product.cover;  
       } else {
         Get.snackbar("Lỗi", response.message);
       }
@@ -60,8 +60,10 @@ class DetailProductController extends GetxController {
   }
 
   Future<void> deleteProduct(int productId) async {
-    final response = await detailProductRepo.deleteProduct(productId);
+    isLoading.value = true;
+    await Future.delayed(const Duration(microseconds: 30));
     try {
+      final response = await detailProductRepo.deleteProduct(productId);
       if (response.success) {
         Get.back(result: 'updated');
         Get.snackbar("Thành công", response.message);
@@ -70,44 +72,53 @@ class DetailProductController extends GetxController {
       }
     } catch (e) {
       Get.dialog(CustomDialog(message: "Đã xảy ra lỗi: ${e.toString()}"));
+    } finally {
+      isLoading.value = false;
     }
   }
 
   Future<void> updateProduct() async {
-    try {
-      final updatedProduct = Product(
-        id: productId!,
-        name: nameController.text,
-        price: int.tryParse(priceController.text) ?? 0,
-        quantity: int.tryParse(quantityController.text) ?? 0,
-        cover: coverController.text,
-      );
-      if (formKey.currentState!.validate()) {
+    validateMode.value = AutovalidateMode.always;
+    final updatedProduct = Product(
+      id: productId!,
+      name: nameController.text,
+      price: int.tryParse(priceController.text) ?? 0,
+      quantity: int.tryParse(quantityController.text) ?? 0,
+      cover: coverController.text,
+    );
+    if (formKey.currentState!.validate()) {
+      isLoading.value = true;
+      await Future.delayed(const Duration(microseconds: 30));
+      try {
         final response = await detailProductRepo.updateProducts(updatedProduct);
-
         if (response.success) {
           Get.back(result: 'updated');
           Get.snackbar("Thành công", "Sản phẩm đã được cập nhật");
         } else {
           Get.snackbar("Lỗi", response.message);
         }
+      } catch (e) {
+        Get.dialog(CustomDialog(message: "Đã xảy ra lỗi: ${e.toString()}"));
+      } finally {
+        isLoading.value = false;
       }
-    } catch (e) {
-      Get.dialog(CustomDialog(message: "Đã xảy ra lỗi: ${e.toString()}"));
     }
   }
 
   Future<void> createProduct() async {
     validateMode.value = AutovalidateMode.always;
-    try {
-      final newProduct = Product(
-        id: 0,
-        name: nameController.text,
-        price: int.tryParse(priceController.text) ?? 0,
-        quantity: int.tryParse(quantityController.text) ?? 0,
-        cover: coverController.text,
-      );
-      if (formKey.currentState!.validate()) {
+    final newProduct = Product(
+      id: 0,
+      name: nameController.text,
+      price: int.tryParse(priceController.text) ?? 0,
+      quantity: int.tryParse(quantityController.text) ?? 0,
+      cover: coverController.text,
+    );
+    if (formKey.currentState!.validate()) {
+      isLoading.value = true;
+      await Future.delayed(const Duration(microseconds: 30));
+
+      try {
         final response = await detailProductRepo.createProduct(newProduct);
         if (response.success) {
           Get.back(result: 'create');
@@ -115,9 +126,11 @@ class DetailProductController extends GetxController {
         } else {
           Get.snackbar("Lỗi", response.message);
         }
+      } catch (e) {
+        Get.dialog(CustomDialog(message: "Đã xảy ra lỗi: ${e.toString()}"));
+      } finally {
+        isLoading.value = false;
       }
-    } catch (e) {
-      Get.dialog(CustomDialog(message: "Đã xảy ra lỗi: ${e.toString()}"));
     }
   }
 }
