@@ -60,7 +60,6 @@ class DetailProductController extends GetxController {
   }
 
   Future<void> deleteProduct(int productId) async {
-    await Future.delayed(const Duration(microseconds: 100));
     try {
       isLoading.value = true;
       final response = await detailProductRepo.deleteProduct(productId);
@@ -79,15 +78,15 @@ class DetailProductController extends GetxController {
 
   Future<void> updateProduct() async {
     validateMode.value = AutovalidateMode.always;
-    final updatedProduct = Product(
-      id: productId!,
-      name: nameController.text,
-      price: int.tryParse(priceController.text) ?? 0,
-      quantity: int.tryParse(quantityController.text) ?? 0,
-      cover: coverController.text,
-    );
     if (formKey.currentState!.validate()) {
       isLoading.value = true;
+      final updatedProduct = Product(
+        id: productId!,
+        name: nameController.text,
+        price: int.tryParse(priceController.text) ?? 0,
+        quantity: int.tryParse(quantityController.text) ?? 0,
+        cover: coverController.text,
+      );
       await Future.delayed(const Duration(microseconds: 100));
       try {
         final response = await detailProductRepo.updateProducts(updatedProduct);
@@ -107,15 +106,15 @@ class DetailProductController extends GetxController {
 
   Future<void> createProduct() async {
     validateMode.value = AutovalidateMode.always;
-    final newProduct = Product(
-      id: 0,
-      name: nameController.text,
-      price: int.tryParse(priceController.text) ?? 0,
-      quantity: int.tryParse(quantityController.text) ?? 0,
-      cover: coverController.text,
-    );
     if (formKey.currentState!.validate()) {
       isLoading.value = true;
+      final newProduct = Product(
+        id: 0,
+        name: nameController.text,
+        price: int.tryParse(priceController.text) ?? 0,
+        quantity: int.tryParse(quantityController.text) ?? 0,
+        cover: coverController.text,
+      );
       await Future.delayed(const Duration(microseconds: 100));
       try {
         final response = await detailProductRepo.createProduct(newProduct);
