@@ -24,7 +24,11 @@ class HomePage extends GetView<HomeController> {
         actions: [
           IconButton(
             onPressed: () {
-              Get.offAllNamed('/create_product');
+              Get.toNamed('/detail')!.then((result) {
+                        if (result == 'create') {
+                          controller.onRefresh();
+                        }
+                      });
             },
             icon: const Icon(Icons.add),
           ),
@@ -55,9 +59,10 @@ class HomePage extends GetView<HomeController> {
                     subtitle: Text('\$${product.price}'),
                     leading: Image.network(product.cover),
                     onTap: () {
-                      Get.toNamed('/detail', arguments: product.id)!.then((result) {
+                      Get.toNamed('/detail', arguments: product.id)!
+                          .then((result) {
                         if (result == 'updated') {
-                          controller.onRefresh(); 
+                          controller.onRefresh();
                         }
                       });
                     },
