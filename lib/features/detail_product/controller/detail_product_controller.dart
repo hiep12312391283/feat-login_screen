@@ -41,14 +41,14 @@ class DetailProductController extends GetxController {
   Future<void> fetchProducts(int productId) async {
     try {
       isLoading.value = true;
-      await Future.delayed(const Duration(microseconds: 30));
+      await Future.delayed(const Duration(microseconds: 100));
       final response = await detailProductRepo.fetchDetailProduct(productId);
       if (response.success) {
         product.value = response.product;
         nameController.text = response.product.name;
         priceController.text = response.product.price.toString();
         quantityController.text = response.product.quantity.toString();
-        coverController.text = response.product.cover;  
+        coverController.text = response.product.cover;
       } else {
         Get.snackbar("Lỗi", response.message);
       }
@@ -60,9 +60,9 @@ class DetailProductController extends GetxController {
   }
 
   Future<void> deleteProduct(int productId) async {
-    isLoading.value = true;
-    await Future.delayed(const Duration(microseconds: 30));
+    await Future.delayed(const Duration(microseconds: 100));
     try {
+      isLoading.value = true;
       final response = await detailProductRepo.deleteProduct(productId);
       if (response.success) {
         Get.back(result: 'updated');
@@ -88,7 +88,7 @@ class DetailProductController extends GetxController {
     );
     if (formKey.currentState!.validate()) {
       isLoading.value = true;
-      await Future.delayed(const Duration(microseconds: 30));
+      await Future.delayed(const Duration(microseconds: 100));
       try {
         final response = await detailProductRepo.updateProducts(updatedProduct);
         if (response.success) {
@@ -116,8 +116,7 @@ class DetailProductController extends GetxController {
     );
     if (formKey.currentState!.validate()) {
       isLoading.value = true;
-      await Future.delayed(const Duration(microseconds: 30));
-
+      await Future.delayed(const Duration(microseconds: 100));
       try {
         final response = await detailProductRepo.createProduct(newProduct);
         if (response.success) {
