@@ -15,48 +15,38 @@ class DetailProductView extends GetView<DetailProductController> {
         title: const Text("Chi tiết sản phẩm"),
         centerTitle: true,
         actions: [
-          IconButton(
-            onPressed: () {
-              controller.deleteProduct(controller.productId);
-            },
-            icon: const Icon(Icons.delete),
-          ),
+          if (controller.productId != null)
+            IconButton(
+              onPressed: () {
+                controller.deleteProduct(controller.productId!);
+              },
+              icon: const Icon(Icons.delete),
+            ),
         ],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CircularProgressIndicator());
         }
-        final product = controller.product.value;
-        if (product == null) {
-          return const Center(
-            child: Text('Không có sản phẩm để hiển thị'),
-          );
-        }
+
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Form(
-            autovalidateMode: controller.validateMode.value,
             key: controller.formKey,
+            autovalidateMode: controller.validateMode.value,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                product.cover.isNotEmpty
-                    ? SizedBox(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height * 0.4,
-                        child: Image.network(
-                          product.cover,
-                          fit: BoxFit.contain,
-                        ),
-                      )
-                    : SizedBox(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height * 0.4,
-                        child: const Center(child: Text("Không có hình ảnh")),
-                      ),
+                if (controller.productId != null &&
+                    controller.product.value != null)
+                  SizedBox(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    child: Image.network(
+                      controller.product.value!.cover,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: controller.coverController,
@@ -112,15 +102,17 @@ class DetailProductView extends GetView<DetailProductController> {
                 ),
                 const SizedBox(height: 15),
                 Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (controller.formKey.currentState!.validate()) {
-                        controller.updateProduct();
-                      }
-                    },
-                    child: const Text('Cập nhật'),
-                  ),
-                ),
+                    child: ElevatedButton(
+                  onPressed: () {
+                    if (controller.productId == null) {
+                      controller.createProduct();
+                    } else {
+                      controller.updateProduct();
+                    }
+                  },
+                  child:
+                      Text(controller.productId == null ? 'Lưu' : 'Cập nhật'),
+                )),
                 const SizedBox(height: 16),
               ],
             ),

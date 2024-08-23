@@ -12,19 +12,21 @@ class DetailProductController extends GetxController {
   final TextEditingController priceController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController coverController = TextEditingController();
-  late final int productId;
+  int? productId;
   final formKey = GlobalKey<FormState>();
-  final validateMode = AutovalidateMode.always.obs;
+  final validateMode = AutovalidateMode.disabled.obs;
 
   @override
   void onInit() {
     super.onInit();
-    productId = Get.arguments as int;
+    productId = Get.arguments as int?;
   }
 
   @override
   void onReady() async {
-    await fetchProducts(productId);
+    if (productId != null) {
+      await fetchProducts(productId!);
+    }
   }
 
   @override
@@ -36,17 +38,8 @@ class DetailProductController extends GetxController {
     coverController.dispose();
   }
 
-  Future<void> deleteProduct(int productId) async {
-    final response = await detailProductRepo.deleteProduct(productId);
-    if (response.success) {
-      Get.back(result: 'updated');
-      Get.snackbar("Thành công", response.message);
-    } else {
-      Get.snackbar("Lỗi", response.message);
-    }
-  }
-
   Future<void> fetchProducts(int productId) async {
+    validateMode.value = AutovalidateMode.always;
     try {
       isLoading.value = true;
       final response = await detailProductRepo.fetchDetailProduct(productId);
@@ -66,20 +59,59 @@ class DetailProductController extends GetxController {
     }
   }
 
+  Future<void> deleteProduct(int productId) async {
+    final response = await detailProductRepo.deleteProduct(productId);
+    try {
+      if (response.success) {
+        Get.back(result: 'updated');
+        Get.snackbar("Thành công", response.message);
+      } else {
+        Get.snackbar("Lỗi", response.message);
+      }
+    } catch (e) {
+      Get.dialog(CustomDialog(message: "Đã xảy ra lỗi: ${e.toString()}"));
+    }
+  }
+
   Future<void> updateProduct() async {
     try {
       final updatedProduct = Product(
-        id: productId,
+        id: productId!,
         name: nameController.text,
         price: int.tryParse(priceController.text) ?? 0,
         quantity: int.tryParse(quantityController.text) ?? 0,
         cover: coverController.text,
       );
-      final response = await detailProductRepo.updateProducts(updatedProduct);
       if (formKey.currentState!.validate()) {
+        final response = await detailProductRepo.updateProducts(updatedProduct);
+
         if (response.success) {
           Get.back(result: 'updated');
           Get.snackbar("Thành công", "Sản phẩm đã được cập nhật");
+        } else {
+          Get.snackbar("Lỗi", response.message);
+        }
+      }
+    } catch (e) {
+      Get.dialog(CustomDialog(message: "Đã xảy ra lỗi: ${e.toString()}"));
+    }
+  }
+
+  Future<void> createProduct() async {
+    validateMode.value = AutovalidateMode.always;
+    try {
+      final newProduct = Product(
+        id: 0,
+        name: nameController.text,
+        price: int.tryParse(priceController.text) ?? 0,
+        quantity: int.tryParse(quantityController.text) ?? 0,
+        cover: coverController.text,
+      );
+      if (formKey.currentState!.validate()) {
+        final response = await detailProductRepo.createProduct(newProduct);
+        if (response.success) {
+          Get.back(result: 'create');
+          Get.snackbar("Thành công", "Sản phẩm đã được tạo mới");
         } else {
           Get.snackbar("Lỗi", response.message);
         }

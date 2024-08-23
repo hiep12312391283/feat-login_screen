@@ -20,7 +20,15 @@ class DetailProductRepo {
 
   Future<DetailProductResponse> updateProducts(Product product) async {
     final body = product.toJson();
-    final response = await apiServices.dio.put('/products/${product.id}',data: body);
+    final response =
+        await apiServices.dio.put('/products/${product.id}', data: body);
+    print('${response.statusCode}');
+    return DetailProductResponse.fromJson(response.data);
+  }
+
+  Future<DetailProductResponse> createProduct(Product product) async {
+    final body = product.toJson();
+    final response = await apiServices.dio.post('/products', data: body);
     print('${response.statusCode}');
     return DetailProductResponse.fromJson(response.data);
   }
