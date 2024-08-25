@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:login_screen/features/cart/controller/cart_controller.dart'; // Điều chỉnh theo project của bạn
+import 'package:login_screen/features/cart/controller/cart_controller.dart'; 
 
 class CartView extends GetView<CartController> {
   const CartView({super.key});
