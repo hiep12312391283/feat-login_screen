@@ -57,6 +57,7 @@ class HomeController extends GetxController {
         if (isLoadMore) {
           productList.addAll(response.data);
           currentPage = tempPage;
+          
         } else {
           productList.assignAll(response.data);
           currentPage = 1;
