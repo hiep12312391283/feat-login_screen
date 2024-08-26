@@ -1,8 +1,9 @@
 import 'package:get/get.dart';
 import 'package:login_screen/base/hive_service.dart';
+import 'package:login_screen/features/home/models/list_product_response.dart';
 
 class CartController extends GetxController {
-  var cartItem = <Map<String, dynamic>>[].obs;
+  var cartItems = <Product>[].obs;
 
   @override
   void onInit() {
@@ -11,20 +12,18 @@ class CartController extends GetxController {
   }
 
   void loadItems() {
-    cartItem.value = HiveService.getCartItems();
+    cartItems.value = HiveService.getCartItems();
   }
 
-  void clearItems() async {
-    await HiveService.clearCart();
-    loadItems();
+  void clearItems() {
+    HiveService.clearCart().then((_) {
+      loadItems();
+    });
   }
 
-  void removeFromCart(int productId) async {
-    await HiveService.deleteItems(productId);
-    loadItems();
-  }
-
-  void backHome() {
-    Get.back(result: 'back');
+  void removeFromCart(int productId) {
+    HiveService.deleteItems(productId).then((_) {
+      loadItems();
+    });
   }
 }

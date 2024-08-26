@@ -1,3 +1,6 @@
+import 'package:hive_flutter/hive_flutter.dart';
+part 'list_product_response.g.dart';
+
 class ListProductResponse {
   final bool success;
   final String message;
@@ -25,11 +28,21 @@ class ListProductResponse {
       };
 }
 
-class Product {
+@HiveType(typeId: 1, adapterName: 'ProductAdapter')
+class Product extends HiveObject {
+  @HiveField(0)
   final int id;
+
+  @HiveField(1)
   final String name;
+
+  @HiveField(2)
   final int price;
+
+  @HiveField(3)
   final int quantity;
+
+  @HiveField(4)
   final String cover;
 
   Product({

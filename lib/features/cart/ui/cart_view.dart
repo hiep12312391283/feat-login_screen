@@ -21,55 +21,44 @@ class CartView extends GetView<CartController> {
         ),
         actions: [
           Obx(() {
-            if (controller.cartItem.isNotEmpty) {
-              return IconButton(
-                icon: const Icon(Icons.delete_forever),
-                onPressed: () {
-                  controller.clearItems();
-                },
-              );
-            } else {
-              return Container();
-            }
+            return controller.cartItems.isNotEmpty
+                ? IconButton(
+                    icon: const Icon(Icons.delete_forever),
+                    onPressed: () {
+                      controller.clearItems();
+                    },
+                  )
+                : const SizedBox();
           }),
         ],
       ),
       body: Obx(() {
-        if (controller.cartItem.isEmpty) {
+        if (controller.cartItems.isEmpty) {
           return const Center(child: Text('Giỏ hàng trống'));
         } else {
           return ListView.builder(
-            itemCount: controller.cartItem.length,
+            itemCount: controller.cartItems.length,
             itemBuilder: (context, index) {
-              final item = controller.cartItem[index];
+              final item = controller.cartItems[index];
               return ListTile(
-                leading: item['cover'] != null
+                leading: item.cover.isNotEmpty
                     ? Image.network(
-                        item['cover'],
+                        item.cover,
                         width: 50,
                         height: 50,
                         fit: BoxFit.cover,
                       )
                     : const Icon(Icons.image_not_supported, size: 50),
-                title: Text(item['name'] ?? 'Tên sản phẩm'),
+                title: Text(item.name.isNotEmpty ? item.name : 'Tên sản phẩm'),
                 subtitle: Text(
-                  '\$${item['price']}',
+                  '\$${item.price}',
                 ),
-                trailing: Obx(() {
-                  if (controller.cartItem.isNotEmpty) {
-                    return IconButton(
-                      onPressed: () {
-                        int productId = item['id'] ?? -1;
-                        if (productId != -1) {
-                          controller.removeFromCart(productId);
-                        }
-                      },
-                      icon: const Icon(Icons.delete),
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
+                trailing: IconButton(
+                  onPressed: () {
+                    controller.removeFromCart(item.id);
+                  },
+                  icon: const Icon(Icons.delete),
+                ),
               );
             },
           );

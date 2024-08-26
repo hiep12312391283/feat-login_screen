@@ -9,6 +9,7 @@ import 'package:login_screen/features/cart/ui/cart_view.dart';
 import 'package:login_screen/features/detail_product/binding/detail_product_binding.dart';
 import 'package:login_screen/features/detail_product/ui/detail_product_view.dart';
 import 'package:login_screen/features/home/binding/home_binding.dart';
+import 'package:login_screen/features/home/models/list_product_response.dart';
 import 'package:login_screen/features/home/ui/home_view.dart';
 import 'package:login_screen/features/login/binding/login_binding.dart';
 import 'package:login_screen/features/login/ui/login_screen.dart';
@@ -16,7 +17,9 @@ import 'package:login_screen/features/login/ui/login_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await HiveService.init(); 
+  await HiveService.init();
+  Hive.registerAdapter(ProductAdapter());
+  await Hive.openBox<Product>('cartBox');
   runApp(const MyApp());
 }
 

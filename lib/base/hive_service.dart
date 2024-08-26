@@ -3,7 +3,7 @@ import 'package:login_screen/features/home/models/list_product_response.dart';
 
 class HiveService {
   static late final Box _box;
-  static late final Box cartBox;
+  static late final Box<Product> cartBox;
   static const tokenKey = 'authToken';
 
   static Future<void> init() async {
@@ -11,24 +11,17 @@ class HiveService {
     cartBox = await Hive.openBox('cartBox');
   }
 
-
-  static Future<void> addToCart(Product product) async {
-    Map<String, dynamic> productData = {
-      'id': product.id,
-      'name': product.name,
-      'price': product.price,
-      'quantity': product.quantity,
-      'cover': product.cover,
-    };
-    await cartBox.put(product.id, productData);
+  static Future<void> clearAll() async {
+    await _box.clear();
+    await cartBox.clear();
   }
 
-  static List<Map<String, dynamic>> getCartItems() {
-    return cartBox
-        .toMap()
-        .values
-        .map((item) => Map<String, dynamic>.from(item))
-        .toList();
+  static Future<void> addToCart(Product product) async {
+    await cartBox.put(product.id, product);
+  }
+
+  static List<Product> getCartItems() {
+    return cartBox.values.toList();
   }
 
   static Future<void> clearCart() async {
@@ -40,8 +33,7 @@ class HiveService {
   }
 
   static bool isProductInCart(int productId) {
-    final cartItems = getCartItems();
-    return cartItems.any((item) => item['id'] == productId);
+    return cartBox.get(productId) != null;
   }
 
   static const _taxCodeKey = "taxCode";
