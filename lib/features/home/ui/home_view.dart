@@ -66,23 +66,41 @@ class HomePage extends GetView<HomeController> {
                         vertical: 8.0, horizontal: 16.0),
                     child: Row(
                       children: [
-                        Image.network(
-                          product.cover,
-                          width: 60,
-                          height: 60,
-                          fit: BoxFit.cover,
-                        ),
-                        const SizedBox(width: 10),
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(product.name,
-                                  style: const TextStyle(fontSize: 16)),
-                              Text('\$${product.price}',
-                                  style: const TextStyle(
-                                      fontSize: 14, color: Colors.grey)),
-                            ],
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.toNamed('/detail', arguments: product.id)!
+                                  .then((result) {
+                                if (result == 'updated') {
+                                  controller.onRefresh();
+                                }
+                              });
+                            },
+                            child: Row(
+                              children: [
+                                Image.network(
+                                  product.cover,
+                                  width: 60,
+                                  height: 60,
+                                  fit: BoxFit.cover,
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(product.name,
+                                          style: const TextStyle(fontSize: 16)),
+                                      Text('\$${product.price}',
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey)),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         IconButton(
@@ -94,11 +112,6 @@ class HomePage extends GetView<HomeController> {
                               ? null
                               : () {
                                   HiveService.addToCart(product);
-                                  Get.snackbar(
-                                    'Thành công',
-                                    '${product.name} đã được thêm vào giỏ hàng!',
-                                    snackPosition: SnackPosition.BOTTOM,
-                                  );
                                   controller.onRefresh();
                                 },
                         ),
