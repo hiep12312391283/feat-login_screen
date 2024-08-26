@@ -11,6 +11,7 @@ class HiveService {
     cartBox = await Hive.openBox('cartBox');
   }
 
+
   static Future<void> addToCart(Product product) async {
     Map<String, dynamic> productData = {
       'id': product.id,
@@ -55,10 +56,6 @@ class HiveService {
 
   static Future<void> saveToken(String token) async {
     await _box.put(_token, token);
-  }
-
-  static Future<void> clearToken() async {
-    await _box.delete(_token);
   }
 
   static String? getToken() {
