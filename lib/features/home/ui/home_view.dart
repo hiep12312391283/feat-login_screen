@@ -25,22 +25,14 @@ class HomePage extends GetView<HomeController> {
         actions: [
           IconButton(
             onPressed: () {
-              Get.toNamed('/detail')!.then((result) {
-                if (result == 'create') {
-                  controller.onRefresh();
-                }
-              });
+              controller.navigateToDetail();
             },
             icon: const Icon(Icons.add),
           ),
           IconButton(
             icon: const Icon(Icons.shopping_cart),
             onPressed: () {
-              Get.toNamed('/cart')!.then((result) {
-                if (result == 'back') {
-                  controller.onRefresh();
-                }
-              });
+              controller.navigateToCart();
             },
           ),
         ],
@@ -69,12 +61,8 @@ class HomePage extends GetView<HomeController> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              Get.toNamed('/detail', arguments: product.id)!
-                                  .then((result) {
-                                if (result == 'updated') {
-                                  controller.onRefresh();
-                                }
-                              });
+                              controller.navigateToDetail(
+                                  productId: product.id);
                             },
                             child: Row(
                               children: [
@@ -111,8 +99,7 @@ class HomePage extends GetView<HomeController> {
                           onPressed: isInCart
                               ? null
                               : () {
-                                  HiveService.addToCart(product);
-                                  controller.onRefresh();
+                                  controller.addToCart(product);
                                 },
                         ),
                       ],

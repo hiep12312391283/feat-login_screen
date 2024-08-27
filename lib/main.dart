@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:login_screen/base/hive_service.dart';
 import 'package:login_screen/features/app/binding/global_binding.dart';
@@ -9,7 +10,7 @@ import 'package:login_screen/features/cart/ui/cart_view.dart';
 import 'package:login_screen/features/detail_product/binding/detail_product_binding.dart';
 import 'package:login_screen/features/detail_product/ui/detail_product_view.dart';
 import 'package:login_screen/features/home/binding/home_binding.dart';
-import 'package:login_screen/features/home/models/list_product_response.dart';
+import 'package:login_screen/features/home/models/product.dart';
 import 'package:login_screen/features/home/ui/home_view.dart';
 import 'package:login_screen/features/login/binding/login_binding.dart';
 import 'package:login_screen/features/login/ui/login_screen.dart';
@@ -18,6 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await HiveService.init();
+
   Hive.registerAdapter(ProductAdapter());
   await Hive.openBox<Product>('cartBox');
   runApp(const MyApp());

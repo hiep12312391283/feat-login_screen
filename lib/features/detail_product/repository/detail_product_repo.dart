@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:login_screen/base/api_services.dart';
 import 'package:login_screen/features/detail_product/models/detail_product_response.dart';
-import 'package:login_screen/features/home/models/list_product_response.dart';
+import 'package:login_screen/features/home/models/product.dart';
 
 class DetailProductRepo {
   final ApiServices apiServices = Get.find();

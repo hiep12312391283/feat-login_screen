@@ -1,10 +1,9 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:login_screen/features/home/models/list_product_response.dart';
+import 'package:login_screen/features/home/models/product.dart';
 
 class HiveService {
   static late final Box _box;
   static late final Box<Product> cartBox;
-  static const tokenKey = 'authToken';
 
   static Future<void> init() async {
     _box = await Hive.openBox('userBox');
@@ -20,7 +19,7 @@ class HiveService {
     await cartBox.put(product.id, product);
   }
 
-  static List<Product> getCartItems() {
+  static List<Product> getCartItem() {
     return cartBox.values.toList();
   }
 
@@ -28,12 +27,12 @@ class HiveService {
     await cartBox.clear();
   }
 
-  static Future<void> deleteItems(int productId) async {
+  static Future<void> deleteItem(int productId) async {
     await cartBox.delete(productId);
   }
 
   static bool isProductInCart(int productId) {
-    return cartBox.get(productId) != null;
+    return cartBox.containsKey(productId);
   }
 
   static const _taxCodeKey = "taxCode";
