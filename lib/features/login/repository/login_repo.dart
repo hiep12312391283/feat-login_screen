@@ -8,7 +8,6 @@ class LoginRepo {
   Future<LoginResponse> login(LoginRequest request) async {
     final body = request.toJson();
     final response = await apiServices.dio.post('/login', data: body);
-
     return LoginResponse.fromJson(response.data);
   }
 }

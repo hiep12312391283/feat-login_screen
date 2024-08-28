@@ -8,11 +8,16 @@ class HiveService {
   static Future<void> init() async {
     _box = await Hive.openBox('userBox');
     cartBox = await Hive.openBox('cartBox');
+    Hive.registerAdapter(ProductAdapter());
   }
 
   static Future<void> clearAll() async {
     await _box.clear();
     await cartBox.clear();
+  }
+
+  static Future<void> clearToken() async {
+    await _box.delete(_token);
   }
 
   static Future<void> addToCart(Product product) async {

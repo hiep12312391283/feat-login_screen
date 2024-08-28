@@ -19,8 +19,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await HiveService.init();
-
-  Hive.registerAdapter(ProductAdapter());
   await Hive.openBox<Product>('cartBox');
   runApp(const MyApp());
 }
