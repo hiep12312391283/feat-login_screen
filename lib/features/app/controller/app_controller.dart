@@ -6,7 +6,7 @@ class AppController extends GetxController {
 
   void logout() async {
     HiveService.setLoggedIn(false);
-    await HiveService.clearAll();
+    await HiveService.clearCart();
     Get.offAllNamed('/login');
   }
 }

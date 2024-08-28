@@ -11,11 +11,6 @@ class HiveService {
     Hive.registerAdapter(ProductAdapter());
   }
 
-  static Future<void> clearAll() async {
-    await _box.clear();
-    await cartBox.clear();
-  }
-
   static Future<void> clearToken() async {
     await _box.delete(_token);
   }
