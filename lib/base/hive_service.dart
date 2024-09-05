@@ -1,11 +1,39 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:login_screen/features/home/models/product.dart';
 
 class HiveService {
   static late final Box _box;
-  static const tokenKey = 'authToken';
-  static final Box cartBox = Hive.box('cartBox');
+  static late final Box<Product> cartBox;
+
   static Future<void> init() async {
+    Hive.registerAdapter(ProductAdapter());
     _box = await Hive.openBox('userBox');
+    cartBox = await Hive.openBox('cartBox');
+  }
+
+
+  static Future<void> clearToken() async {
+    await _box.delete(_token);
+  }
+
+  static Future<void> addToCart(Product product) async {
+    await cartBox.put(product.id, product);
+  }
+
+  static List<Product> getCartItem() {
+    return cartBox.values.toList();
+  }
+
+  static Future<void> clearCart() async {
+    await cartBox.clear();
+  }
+
+  static Future<void> deleteItem(int productId) async {
+    await cartBox.delete(productId);
+  }
+
+  static bool isProductInCart(int productId) {
+    return cartBox.containsKey(productId);
   }
 
   static const _taxCodeKey = "taxCode";
@@ -19,11 +47,7 @@ class HiveService {
   }
 
   static Future<void> saveToken(String token) async {
-    await _box.put('token', token);
-  }
-
-  static Future<void> clearToken(String token) async {
-    await _box.put('token', token);
+    await _box.put(_token, token);
   }
 
   static String? getToken() {

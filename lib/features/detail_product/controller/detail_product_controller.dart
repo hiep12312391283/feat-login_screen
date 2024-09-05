@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:login_screen/features/app/ui/custom/custom_dialog.dart';
 import 'package:login_screen/features/detail_product/repository/detail_product_repo.dart';
-import 'package:login_screen/features/home/models/list_product_response.dart';
+import 'package:login_screen/features/home/models/product.dart';
 
 class DetailProductController extends GetxController {
   final DetailProductRepo detailProductRepo = Get.find();

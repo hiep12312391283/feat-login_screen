@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:login_screen/base/hive_service.dart';
 import 'package:login_screen/features/app/controller/app_controller.dart';
 import 'package:login_screen/features/app/ui/custom/custom_dialog.dart';
 import 'package:login_screen/features/home/models/list_product_request.dart';
-import 'package:login_screen/features/home/models/list_product_response.dart';
+import 'package:login_screen/features/home/models/product.dart';
 import 'package:login_screen/features/home/repository/list_product_repo.dart';
 import 'package:dio/dio.dart';
 
@@ -27,7 +28,6 @@ class HomeController extends GetxController {
     scrollController.removeListener(_scrollListener);
     super.onClose();
   }
-  
 
   void _scrollListener() {
     if (scrollController.position.pixels >=
@@ -38,10 +38,6 @@ class HomeController extends GetxController {
 
   void logout() {
     appController.logout();
-  }
-
-  void navigateToCart() {
-    Get.toNamed('/cart');
   }
 
   Future<void> fetchProducts({bool isLoadMore = false}) async {
@@ -80,5 +76,27 @@ class HomeController extends GetxController {
 
   Future<void> onRefresh() async {
     await fetchProducts();
+  }
+
+  void addToCart(Product product) {
+    HiveService.addToCart(product);
+    productList.refresh();
+  }
+
+  Future<void> navigateToDetail({int? productId}) async {
+    final result = await Get.toNamed(
+      '/detail',
+      arguments: productId,
+    );
+    if (result != null && (result == 'updated' || result == 'create')) {
+      onRefresh();
+    }
+  }
+
+  Future<void> navigateToCart() async {
+    final result = await Get.toNamed('/cart');
+    if (result != null && result == 'back') {
+      onRefresh();
+    }
   }
 }

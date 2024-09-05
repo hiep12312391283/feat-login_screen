@@ -1,9 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:login_screen/base/hive_service.dart';
 import 'package:login_screen/features/app/binding/global_binding.dart';
 import 'package:login_screen/features/app/ui/splash_screen.dart';
+import 'package:login_screen/features/cart/binding/cart_binding.dart';
+import 'package:login_screen/features/cart/ui/cart_view.dart';
 import 'package:login_screen/features/detail_product/binding/detail_product_binding.dart';
 import 'package:login_screen/features/detail_product/ui/detail_product_view.dart';
 import 'package:login_screen/features/home/binding/home_binding.dart';
@@ -15,7 +18,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await HiveService.init();
-
   runApp(const MyApp());
 }
 
@@ -42,7 +44,11 @@ class MyApp extends StatelessWidget {
             GetPage(
                 name: '/detail',
                 page: () => const DetailProductView(),
-                binding: DetailProductBinding())
+                binding: DetailProductBinding()),
+            GetPage(
+                name: '/cart',
+                page: () => const CartView(),
+                binding: CartBinding())
           ]),
     );
   }

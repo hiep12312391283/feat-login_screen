@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:login_screen/base/hive_service.dart';
 import 'package:login_screen/features/home/controller/home_controller.dart';
 
 class HomePage extends GetView<HomeController> {
@@ -24,11 +25,7 @@ class HomePage extends GetView<HomeController> {
         actions: [
           IconButton(
             onPressed: () {
-              Get.toNamed('/detail')!.then((result) {
-                        if (result == 'create') {
-                          controller.onRefresh();
-                        }
-                      });
+              controller.navigateToDetail();
             },
             icon: const Icon(Icons.add),
           ),
@@ -54,31 +51,64 @@ class HomePage extends GetView<HomeController> {
               itemBuilder: (context, index) {
                 if (index < controller.productList.length) {
                   final product = controller.productList[index];
-                  return ListTile(
-                    title: Text(product.name),
-                    subtitle: Text('\$${product.price}'),
-                    leading: Image.network(product.cover),
-                    onTap: () {
-                      Get.toNamed('/detail', arguments: product.id)!
-                          .then((result) {
-                        if (result == 'updated') {
-                          controller.onRefresh();
-                        }
-                      });
-                    },
-                    trailing: IconButton(
-                      icon: const Icon(Icons.add_shopping_cart_rounded),
-                      onPressed: () {
-                        Get.snackbar(
-                          'Thành công',
-                          '${product.name} đã được thêm vào giỏ hàng!',
-                          snackPosition: SnackPosition.BOTTOM,
-                        );
-                      },
+                  final isInCart = HiveService.isProductInCart(product.id);
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 16.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              controller.navigateToDetail(
+                                  productId: product.id);
+                            },
+                            child: Row(
+                              children: [
+                                Image.network(
+                                  product.cover,
+                                  width: 60,
+                                  height: 60,
+                                  fit: BoxFit.cover,
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(product.name,
+                                          style: const TextStyle(fontSize: 16)),
+                                      Text('\$${product.price}',
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey)),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.add_shopping_cart_rounded,
+                            color: isInCart ? Colors.grey : Colors.blue,
+                          ),
+                          onPressed: isInCart
+                              ? null
+                              : () {
+                                  controller.addToCart(product);
+                                },
+                        ),
+                      ],
                     ),
                   );
                 } else {
-                  return const Center(child: CircularProgressIndicator());
+                  return controller.isLoading.value
+                      ? const Center(child: CircularProgressIndicator())
+                      : const SizedBox.shrink();
                 }
               },
             ),

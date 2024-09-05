@@ -1,4 +1,4 @@
-import 'package:login_screen/features/home/models/list_product_response.dart';
+import 'package:login_screen/features/home/models/product.dart';
 
 class DetailProductResponse {
   final bool success;
@@ -13,9 +13,9 @@ class DetailProductResponse {
 
   factory DetailProductResponse.fromJson(Map<String, dynamic> json) =>
       DetailProductResponse(
-        success: json["success"]?? false,
-        message: json["message"]?? '',
-        product: Product.fromJson(json["data"] ??{}),
+        success: json["success"] ?? false,
+        message: json["message"] ?? '',
+        product: Product.fromJson(json["data"] ?? {}),
       );
 
   Map<String, dynamic> toJson() => {
