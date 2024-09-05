@@ -106,7 +106,9 @@ class HomePage extends GetView<HomeController> {
                     ),
                   );
                 } else {
-                  return const Center(child: CircularProgressIndicator());
+                  return controller.isLoading.value
+                      ? const Center(child: CircularProgressIndicator())
+                      : const SizedBox.shrink();
                 }
               },
             ),

@@ -6,10 +6,11 @@ class HiveService {
   static late final Box<Product> cartBox;
 
   static Future<void> init() async {
+    Hive.registerAdapter(ProductAdapter());
     _box = await Hive.openBox('userBox');
     cartBox = await Hive.openBox('cartBox');
-    Hive.registerAdapter(ProductAdapter());
   }
+
 
   static Future<void> clearToken() async {
     await _box.delete(_token);
