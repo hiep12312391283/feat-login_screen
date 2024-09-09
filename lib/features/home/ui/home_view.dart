@@ -52,7 +52,6 @@ class HomePage extends GetView<HomeController> {
                 if (index < controller.productList.length) {
                   final product = controller.productList[index];
                   final isInCart = HiveService.isProductInCart(product.id);
-
                   return Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 8.0, horizontal: 16.0),
@@ -117,7 +116,16 @@ class HomePage extends GetView<HomeController> {
       }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          controller.logout();
+          Get.defaultDialog(
+            title: 'Xác nhận',
+            middleText: 'Bạn có muốn đăng xuất không?',
+            textCancel: 'Hủy',
+            textConfirm: 'Đăng xuất',
+            onConfirm: () {
+              controller.logout();
+              Get.back();
+            },
+          );
         },
         child: const Icon(Icons.exit_to_app),
       ),

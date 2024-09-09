@@ -55,7 +55,16 @@ class CartView extends GetView<CartController> {
                 ),
                 trailing: IconButton(
                   onPressed: () {
-                    controller.removeFromCart(item.id);
+                    Get.defaultDialog(
+                      title: 'Xác nhận',
+                      middleText: 'Bạn có muốn xóa sản phẩm này không?',
+                      textCancel: 'Hủy',
+                      textConfirm: 'Xóa',
+                      onConfirm: () {
+                        controller.removeFromCart(item.id);
+                        Get.back();
+                      },
+                    );
                   },
                   icon: const Icon(Icons.delete),
                 ),
