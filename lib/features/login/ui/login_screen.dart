@@ -42,6 +42,7 @@ class LoginView extends GetView<LoginController> {
                             ),
                             const SizedBox(height: 8),
                             TextFormField(
+                              textInputAction: TextInputAction.next,
                               maxLength: 10,
                               keyboardType: TextInputType.number,
                               inputFormatters: <TextInputFormatter>[
@@ -95,6 +96,7 @@ class LoginView extends GetView<LoginController> {
                             const SizedBox(height: 8),
 
                             TextFormField(
+                              textInputAction: TextInputAction.next,
                               controller: controller.accountController,
                               decoration: InputDecoration(
                                 hintText: 'Tài khoản',
@@ -129,6 +131,7 @@ class LoginView extends GetView<LoginController> {
                             ),
                             const SizedBox(height: 8),
                             TextFormField(
+                              // textInputAction: TextInputAction.next,
                               validator: (value) {
                                 if (value == null ||
                                     value.length < 6 ||
@@ -167,10 +170,10 @@ class LoginView extends GetView<LoginController> {
                               ),
                             ),
                             const SizedBox(height: 20),
-
                             //Button đăng nhập
                             ElevatedButton(
                               onPressed: () {
+                                FocusScope.of(context).unfocus();
                                 controller.login();
                               },
                               style: ElevatedButton.styleFrom(

@@ -28,7 +28,6 @@ class DetailProductView extends GetView<DetailProductController> {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Form(
@@ -49,6 +48,7 @@ class DetailProductView extends GetView<DetailProductController> {
                   ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  textInputAction: TextInputAction.next,
                   controller: controller.coverController,
                   decoration: const InputDecoration(labelText: 'URL hình ảnh'),
                   validator: (value) {
@@ -63,6 +63,7 @@ class DetailProductView extends GetView<DetailProductController> {
                   },
                 ),
                 TextFormField(
+                  textInputAction: TextInputAction.next,
                   controller: controller.nameController,
                   decoration: const InputDecoration(labelText: 'Tên sản phẩm'),
                   validator: (value) {
@@ -73,6 +74,7 @@ class DetailProductView extends GetView<DetailProductController> {
                   },
                 ),
                 TextFormField(
+                  textInputAction: TextInputAction.next,
                   controller: controller.quantityController,
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
@@ -87,6 +89,7 @@ class DetailProductView extends GetView<DetailProductController> {
                   },
                 ),
                 TextFormField(
+                  textInputAction: TextInputAction.done,
                   controller: controller.priceController,
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
@@ -104,6 +107,7 @@ class DetailProductView extends GetView<DetailProductController> {
                 Center(
                     child: ElevatedButton(
                   onPressed: () {
+                    FocusScope.of(context).unfocus();
                     if (controller.productId == null) {
                       controller.createProduct();
                     } else {

@@ -16,7 +16,6 @@ class LoginController extends GetxController {
   final RxString taxCode = ''.obs;
   final RxString password = ''.obs;
   final LoginRepo loginRepo = Get.find();
-
   void toggleEyeIcon() {
     isObscure.value = !isObscure.value;
   }
